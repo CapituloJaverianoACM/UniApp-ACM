@@ -421,6 +421,94 @@ function updateAuthUI(isLoggedIn, email = '') {
     }
 }
 
+function getParsedLocal(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        return raw ? JSON.parse(raw) : fallback;
+    } catch (error) {
+        return fallback;
+    }
+}
+
+function getPlanPrefix(planId) {
+    return planId === 'default' ? '' : `${planId}_`;
+}
+
+function normalizePlans(rawPlans) {
+    const validPlans = Array.isArray(rawPlans)
+        ? rawPlans.filter((plan) => plan && typeof plan === 'object' && typeof plan.id === 'string')
+        : [];
+
+    return validPlans.length > 0
+        ? validPlans
+        : [{ id: 'default', nombre: 'Mi Plan de Estudios', descripcion: 'Plan de estudios principal' }];
+}
+
+function hasSyncMetadata(syncMeta) {
+    if (!syncMeta || typeof syncMeta !== 'object') return false;
+    if (!Array.isArray(syncMeta.planes) || syncMeta.planes.length === 0) return false;
+    if (!syncMeta.planesData || typeof syncMeta.planesData !== 'object') return false;
+    return true;
+}
+
+function buildSyncMetadata() {
+    const planes = getParsedLocal('uniapp_planes', []);
+    const normalizedPlanes = normalizePlans(planes);
+    const storedPlanActivo = localStorage.getItem('uniapp_planActivo') || 'default';
+    const planActivo = normalizedPlanes.some((plan) => plan.id === storedPlanActivo)
+        ? storedPlanActivo
+        : normalizedPlanes[0].id;
+    const planesData = {};
+
+    normalizedPlanes.forEach((plan) => {
+        const planId = plan.id;
+        const prefix = getPlanPrefix(planId);
+        planesData[planId] = {
+            materias: getParsedLocal(`uniapp_${prefix}materias`, []),
+            clases: getParsedLocal(`uniapp_${prefix}clases`, []),
+            calificaciones: getParsedLocal(`uniapp_${prefix}calificaciones`, [])
+        };
+    });
+
+    return {
+        version: 1,
+        planes: normalizedPlanes,
+        planActivo,
+        planesData
+    };
+}
+
+function restorePlanData(syncMeta) {
+    const planes = normalizePlans(syncMeta?.planes);
+    const requestedPlanActivo = syncMeta?.planActivo || 'default';
+    const planActivo = planes.some((plan) => plan.id === requestedPlanActivo)
+        ? requestedPlanActivo
+        : planes[0].id;
+    const planesData = syncMeta?.planesData || {};
+
+    localStorage.setItem('uniapp_planes', JSON.stringify(planes));
+    localStorage.setItem('uniapp_planActivo', planActivo);
+
+    planes.forEach((plan) => {
+        const planId = plan.id;
+        const prefix = getPlanPrefix(planId);
+        const planData = planesData[planId] || {};
+
+        localStorage.setItem(
+            `uniapp_${prefix}materias`,
+            JSON.stringify(Array.isArray(planData.materias) ? planData.materias : [])
+        );
+        localStorage.setItem(
+            `uniapp_${prefix}clases`,
+            JSON.stringify(Array.isArray(planData.clases) ? planData.clases : [])
+        );
+        localStorage.setItem(
+            `uniapp_${prefix}calificaciones`,
+            JSON.stringify(Array.isArray(planData.calificaciones) ? planData.calificaciones : [])
+        );
+    });
+}
+
 // Sync local data to cloud
 async function syncToCloud() {
     if (!currentUser || !authSession) {
@@ -439,14 +527,21 @@ async function syncToCloud() {
             return;
         }
         
-        // Gather all local data - using correct localStorage keys (prefix: uniapp_)
+        const syncMeta = buildSyncMetadata();
+        const activePlanData = syncMeta.planesData[syncMeta.planActivo] || {};
+        const currentConfig = getParsedLocal('uniapp_configuracion', {});
+
+        // Gather all local data - active plan for backward compatibility + metadata for all plans
         const localData = {
             user_id: currentUser.id,
-            pensum: JSON.parse(localStorage.getItem('uniapp_materias') || '[]'),
-            clases: JSON.parse(localStorage.getItem('uniapp_clases') || '[]'),
-            calificaciones: JSON.parse(localStorage.getItem('uniapp_calificaciones') || '[]'),
-            configuracion: JSON.parse(localStorage.getItem('uniapp_configuracion') || '{}'),
-            franjas: JSON.parse(localStorage.getItem('uniapp_franjas') || '[]')
+            pensum: Array.isArray(activePlanData.materias) ? activePlanData.materias : [],
+            clases: Array.isArray(activePlanData.clases) ? activePlanData.clases : [],
+            calificaciones: Array.isArray(activePlanData.calificaciones) ? activePlanData.calificaciones : [],
+            configuracion: {
+                ...currentConfig,
+                _sync_meta: syncMeta
+            },
+            franjas: getParsedLocal('uniapp_franjas', [])
         };
         
         console.log('Syncing data:', localData); // Debug log
@@ -500,9 +595,15 @@ async function pullFromCloud() {
         }
         
         const data = result.data || {};
+        const syncMeta = data.configuracion?._sync_meta;
         
         // Check if cloud has data
-        const hasCloudData = data.pensum?.length > 0 || data.clases?.length > 0;
+        const hasCloudData = (Array.isArray(data.pensum) && data.pensum.length > 0) ||
+            (Array.isArray(data.clases) && data.clases.length > 0) ||
+            (Array.isArray(data.calificaciones) && data.calificaciones.length > 0) ||
+            (data.configuracion && Object.keys(data.configuracion).length > 0) ||
+            (Array.isArray(data.franjas) && data.franjas.length > 0) ||
+            hasSyncMetadata(syncMeta);
         const hasLocalData = localStorage.getItem('uniapp_materias');
         
         if (hasCloudData && hasLocalData) {
@@ -517,6 +618,21 @@ async function pullFromCloud() {
             if (data.clases) localStorage.setItem('uniapp_clases', JSON.stringify(data.clases));
             if (data.calificaciones) localStorage.setItem('uniapp_calificaciones', JSON.stringify(data.calificaciones));
             if (data.configuracion) localStorage.setItem('uniapp_configuracion', JSON.stringify(data.configuracion));
+
+            // Import cloud data for all plans if sync metadata is available
+            if (hasSyncMetadata(syncMeta)) {
+                restorePlanData(syncMeta);
+            } else {
+                if (data.pensum) localStorage.setItem('uniapp_materias', JSON.stringify(data.pensum));
+                if (data.clases) localStorage.setItem('uniapp_clases', JSON.stringify(data.clases));
+                if (data.calificaciones) localStorage.setItem('uniapp_calificaciones', JSON.stringify(data.calificaciones));
+            }
+
+            if (data.configuracion && typeof data.configuracion === 'object') {
+                const { _sync_meta, ...cleanConfig } = data.configuracion;
+                localStorage.setItem('uniapp_configuracion', JSON.stringify(cleanConfig));
+            }
+
             if (data.franjas) localStorage.setItem('uniapp_franjas', JSON.stringify(data.franjas));
             
             // Reload page to reflect changes
