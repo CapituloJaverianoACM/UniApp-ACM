@@ -10,32 +10,32 @@
             <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Gestión por Semestre</h1>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Administra las materias de cada semestre</p>
         </div>
-        <div class="flex items-center space-x-4">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
             <label class="text-sm font-medium text-gray-700 dark:text-gray-300">Seleccionar semestre:</label>
             <select id="semester-select" onchange="loadSemester(this.value)"
-                    class="border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:ring-accent-500 focus:border-accent-500 transition-colors">
+                    class="w-full sm:w-auto border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:ring-accent-500 focus:border-accent-500 transition-colors">
                 <!-- Options populated by JS -->
             </select>
         </div>
     </div>
     
     <!-- Semester Stats -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <p class="text-sm text-gray-500 dark:text-gray-400">Promedio Semestral</p>
             <p class="text-2xl font-bold text-accent-600" id="semester-gpa">--</p>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <p class="text-sm text-gray-500 dark:text-gray-400">Créditos del Semestre</p>
             <p class="text-2xl font-bold text-gray-900 dark:text-white">
                 <span id="semester-credits">0</span> / <span id="semester-max-credits">24</span>
             </p>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <p class="text-sm text-gray-500 dark:text-gray-400">Materias</p>
             <p class="text-2xl font-bold text-gray-900 dark:text-white" id="semester-courses-count">0</p>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <p class="text-sm text-gray-500 dark:text-gray-400">Estado</p>
             <p class="text-lg font-semibold" id="semester-status">
                 <span class="text-gray-500 dark:text-gray-400">--</span>
@@ -44,10 +44,10 @@
     </div>
     
     <!-- Semester Courses Grid -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-6 transition-colors">
-        <div class="flex items-center justify-between mb-4">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 sm:p-6 transition-colors">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-4">
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Materias del Semestre <span id="current-semester-num">1</span></h2>
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center gap-2">
                 <span class="text-sm text-gray-500 dark:text-gray-400">Clic en <svg class="w-4 h-4 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path></svg> para mover</span>
             </div>
         </div>
@@ -64,9 +64,9 @@
     </div>
     
     <!-- Other Semesters (for drag-drop) -->
-    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-6 transition-colors">
+    <div class="bg-gray-50 dark:bg-gray-900 rounded-xl p-4 sm:p-6 transition-colors">
         <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-4">Mover a otro semestre</h3>
-        <div id="other-semesters-drop" class="grid grid-cols-5 sm:grid-cols-8 lg:grid-cols-10 gap-2">
+        <div id="other-semesters-drop" class="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-10 gap-2">
             <!-- Semester drop zones will be populated here -->
         </div>
     </div>
@@ -74,7 +74,7 @@
     <!-- Status Legend -->
     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 transition-colors">
         <h3 class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Leyenda de Estados</h3>
-        <div class="flex flex-wrap gap-4">
+        <div class="flex flex-wrap gap-x-4 gap-y-2 tablet-stack-actions">
             <div class="flex items-center space-x-2">
                 <span class="w-3 h-3 rounded-full bg-gray-300 dark:bg-gray-600"></span>
                 <span class="text-sm text-gray-600 dark:text-gray-400">Pendiente</span>
@@ -107,15 +107,15 @@
 <div id="move-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 bg-opacity-75" onclick="closeMoveModal()"></div>
-        <div class="relative bg-white rounded-xl shadow-xl max-w-md w-full p-6">
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">Mover Materia</h3>
-            <p id="move-modal-message" class="text-sm text-gray-600 mb-4"></p>
-            <div id="move-modal-warnings" class="hidden mb-4 p-3 bg-yellow-50 rounded-lg">
-                <p class="text-sm text-yellow-700"></p>
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-4 sm:p-6 transition-colors">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Mover Materia</h3>
+            <p id="move-modal-message" class="text-sm text-gray-600 dark:text-gray-400 mb-4"></p>
+            <div id="move-modal-warnings" class="hidden mb-4 p-3 bg-yellow-50 dark:bg-yellow-900/30 rounded-lg">
+                <p class="text-sm text-yellow-700 dark:text-yellow-400"></p>
             </div>
-            <div class="flex justify-end space-x-3">
+            <div class="flex justify-end gap-3 mobile-actions">
                 <button onclick="closeMoveModal()"
-                        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
+                        class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
                     Cancelar
                 </button>
                 <button id="move-confirm-btn" onclick="confirmMove()"
@@ -246,12 +246,12 @@
         
         return `
             <div id="course-card-${materia.codigo}" 
-                 class="course-card ${status.bg} ${status.border} border-2 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all"
+                 class="course-card ${status.bg} ${status.border} border-2 rounded-xl p-4 cursor-pointer hover:shadow-md transition-all min-w-0"
                  onclick="handleCourseCardClick(event, '${materia.codigo}')">
                 <div class="flex items-start justify-between mb-2">
-                    <div class="flex items-center space-x-2">
+                    <div class="flex items-center space-x-2 min-w-0">
                         <span class="w-2 h-2 rounded-full ${status.dot}"></span>
-                        <span class="text-xs text-gray-500">${status.label}</span>
+                        <span class="text-xs text-gray-500 dark:text-gray-400 truncate">${status.label}</span>
                     </div>
                     <div class="flex items-center space-x-2">
                         <span class="text-sm font-medium text-gray-600">${materia.creditos} cr</span>
@@ -263,8 +263,8 @@
                         </button>
                     </div>
                 </div>
-                <h4 class="font-semibold text-gray-900 mb-1">${materia.nombre}</h4>
-                <p class="text-sm text-gray-500 mb-2">${materia.codigo}</p>
+                <h4 class="font-semibold text-gray-900 dark:text-white mb-1 break-words">${materia.nombre}</h4>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mb-2">${materia.codigo}</p>
                 ${materia.prerrequisitos?.length ? 
                     `<p class="text-xs text-gray-400">Req: ${materia.prerrequisitos.join(', ')}</p>` : ''}
                 ${grade !== undefined ? 

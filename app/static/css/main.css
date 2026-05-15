@@ -167,6 +167,44 @@ body {
     color: var(--text-primary);
     background-color: var(--bg-secondary);
     transition: background-color 0.3s ease, color 0.3s ease;
+    overflow-x: hidden;
+}
+
+* {
+    min-width: 0;
+}
+
+img,
+svg,
+canvas,
+video {
+    max-width: 100%;
+}
+
+.mobile-scroll {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-gutter: stable;
+}
+
+.mobile-scroll-hint {
+    position: relative;
+}
+
+.mobile-scroll-hint::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1.75rem;
+    pointer-events: none;
+    background: linear-gradient(to right, transparent, var(--bg-primary));
+}
+
+[data-theme="dark"] .mobile-scroll-hint::after {
+    background: linear-gradient(to right, transparent, var(--bg-primary));
 }
 
 /* ==================== Accent Color Utilities ==================== */
@@ -238,6 +276,73 @@ textarea:focus {
 input::placeholder,
 textarea::placeholder {
     color: var(--text-muted);
+}
+
+select {
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 0.5rem;
+    min-height: 2.5rem;
+    padding: 0.55rem 2.75rem 0.55rem 0.85rem;
+    cursor: pointer;
+    line-height: 1.25;
+    font-weight: 500;
+    border-color: var(--border-primary);
+    background-color: var(--bg-primary);
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%234B5563' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    background-size: 1rem;
+    box-shadow:
+        0 1px 2px rgba(17, 24, 39, 0.06),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+select.rounded {
+    border-radius: 0.5rem;
+}
+
+select:hover {
+    border-color: var(--color-accent);
+    box-shadow:
+        0 2px 8px rgba(17, 24, 39, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.85);
+}
+
+select:focus {
+    box-shadow:
+        0 0 0 3px var(--color-accent-bg),
+        0 6px 18px rgba(80, 145, 175, 0.16);
+}
+
+select:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+[data-theme="dark"] select {
+    border-color: rgba(107, 114, 128, 0.9);
+    background-color: var(--bg-tertiary);
+    background-image:
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 20 20' fill='none'%3E%3Cpath d='M5 7.5L10 12.5L15 7.5' stroke='%23E5E7EB' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    box-shadow:
+        0 1px 2px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+[data-theme="dark"] select:hover {
+    border-color: var(--color-accent);
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.28),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.time-block select,
+.edit-time-block select {
+    min-height: 2.25rem;
+    padding-top: 0.45rem;
+    padding-bottom: 0.45rem;
 }
 
 /* ==================== Buttons ==================== */
@@ -369,8 +474,9 @@ textarea::placeholder {
 
 /* ==================== Semester Columns ==================== */
 .semester-column {
+    width: 100%;
     min-width: 200px;
-    max-width: 280px;
+    max-width: none;
 }
 
 @media (max-width: 768px) {
@@ -522,9 +628,364 @@ textarea::placeholder {
 }
 
 /* ==================== Responsive Utilities ==================== */
+@media (max-width: 1023px) {
+    .pensum-actions {
+        gap: 0.75rem !important;
+    }
+
+    .pensum-history-control {
+        width: 100%;
+    }
+
+    .pensum-history-control > button {
+        flex: 1 1 0;
+        justify-content: center;
+    }
+
+    .pensum-history-control > div {
+        flex: 0 0 1px;
+    }
+
+    .pensum-filters {
+        gap: 0.75rem !important;
+    }
+
+    .pensum-filters > .relative,
+    .pensum-filters > button {
+        width: 100%;
+    }
+
+    .pensum-filters > .relative > button,
+    .pensum-filters > button {
+        justify-content: center;
+    }
+
+    .pensum-view-toggle-row {
+        align-items: stretch !important;
+    }
+
+    .pensum-view-toggle-wrap {
+        width: 100%;
+        overflow-x: visible;
+    }
+
+    .pensum-view-toggle {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.25rem;
+        width: 100%;
+        min-width: 0 !important;
+    }
+
+    .pensum-view-toggle > * + * {
+        margin-left: 0 !important;
+    }
+
+    .pensum-view-toggle > button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        white-space: nowrap;
+    }
+
+    .pensum-view-toggle > button > span {
+        justify-content: center;
+    }
+
+    .pensum-loss-control {
+        width: 100%;
+    }
+
+    .pensum-loss-control select {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .tablet-stack-actions {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .tablet-stack-actions > * {
+        width: 100%;
+        margin-left: 0 !important;
+    }
+
+    .tablet-stack-actions > button,
+    .tablet-stack-actions > a,
+    .tablet-stack-actions > .relative > button,
+    .tablet-stack-actions select {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .tablet-stack-actions > .relative > div[id$="-dropdown"] {
+        width: 100%;
+    }
+
+    .pensum-actions {
+        gap: 0.75rem !important;
+    }
+
+    .pensum-history-control {
+        width: 100%;
+    }
+
+    .pensum-history-control > button {
+        flex: 1 1 0;
+        justify-content: center;
+    }
+
+    .pensum-history-control > div {
+        flex: 0 0 1px;
+    }
+
+    .pensum-filters {
+        gap: 0.75rem !important;
+    }
+
+    .pensum-filters > .relative,
+    .pensum-filters > button {
+        width: 100%;
+    }
+
+    .pensum-filters > .relative > button,
+    .pensum-filters > button {
+        justify-content: center;
+    }
+
+    .pensum-view-toggle-row {
+        align-items: stretch !important;
+    }
+
+    .pensum-view-toggle-wrap {
+        width: 100%;
+        overflow-x: visible;
+    }
+
+    .pensum-view-toggle {
+        display: grid !important;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.25rem;
+        width: 100%;
+        min-width: 0 !important;
+    }
+
+    .pensum-view-toggle > * + * {
+        margin-left: 0 !important;
+    }
+
+    .pensum-view-toggle > button {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+        padding-left: 0.25rem;
+        padding-right: 0.25rem;
+        white-space: nowrap;
+    }
+
+    .pensum-view-toggle > button > span {
+        justify-content: center;
+    }
+
+    .pensum-loss-control {
+        width: 100%;
+    }
+
+    .pensum-loss-control select {
+        width: 100%;
+    }
+
+    .mobile-actions {
+        flex-direction: column-reverse !important;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+    }
+
+    .mobile-actions > * {
+        width: 100%;
+        justify-content: center;
+        margin-left: 0 !important;
+    }
+
+    #optimization-presets {
+        flex-direction: column;
+    }
+
+    #optimization-presets button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 @media (max-width: 640px) {
     .hide-mobile {
         display: none !important;
+    }
+
+    body {
+        font-size: 15px;
+    }
+
+    .mobile-scroll {
+        margin-left: -1rem;
+        margin-right: -1rem;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+
+    .mobile-scroll-hint::after {
+        right: -1rem;
+    }
+
+    #alerts-container {
+        left: 1rem;
+        right: 1rem;
+        max-width: none;
+    }
+
+    .app-alert {
+        left: 1rem !important;
+        right: 1rem !important;
+        top: 1rem !important;
+        max-width: none !important;
+        width: auto !important;
+    }
+
+    #authModal > .flex,
+    #course-modal > .flex,
+    #simulation-modal > .flex,
+    #materia-modal > .flex,
+    #new-plan-modal > .flex,
+    #manage-plans-modal > .flex,
+    #edit-plan-modal > .flex,
+    #import-modal > .flex,
+    #franja-modal > .flex,
+    #ics-modal > .flex,
+    #schedule-import-modal > .flex,
+    #edit-class-modal > .flex,
+    #move-modal > .flex {
+        min-height: 100dvh;
+        align-items: flex-end;
+        padding: 0.75rem;
+    }
+
+    #authModal > .flex {
+        align-items: center;
+        padding-top: 0.75rem;
+        padding-bottom: 0.75rem;
+    }
+
+    #manage-plans-modal > .flex {
+        align-items: center;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+    }
+
+    #authModal > .flex > .relative,
+    #course-modal > .flex > .relative,
+    #simulation-modal > .flex > .relative,
+    #materia-modal > .flex > .relative,
+    #new-plan-modal > .flex > .relative,
+    #manage-plans-modal > .flex > .relative,
+    #edit-plan-modal > .flex > .relative,
+    #import-modal > .flex > .relative,
+    #franja-modal > .flex > .relative,
+    #ics-modal > .flex > .relative,
+    #schedule-import-modal > .flex > .relative,
+    #edit-class-modal > .flex > .relative,
+    #move-modal > .flex > .relative {
+        width: 100%;
+        max-width: 100%;
+        max-height: calc(100dvh - 1.5rem);
+        overflow-y: auto;
+        border-radius: 1rem;
+        padding: 1rem;
+    }
+
+    .modal-content,
+    .modal-backdrop {
+        max-width: 100%;
+    }
+
+    .mobile-stack {
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .mobile-stack > * {
+        width: 100%;
+        margin-left: 0 !important;
+    }
+
+    .mobile-grid-1 {
+        grid-template-columns: minmax(0, 1fr) !important;
+    }
+
+    .mobile-tight-card {
+        padding: 1rem !important;
+    }
+
+    .time-block,
+    .edit-time-block {
+        display: grid !important;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+        gap: 0.5rem;
+        align-items: end;
+    }
+
+    .time-block > *,
+    .edit-time-block > * {
+        margin-left: 0 !important;
+    }
+
+    .time-block > select,
+    .edit-time-block > select {
+        grid-column: 1 / -1;
+        width: 100%;
+    }
+
+    .time-block > input,
+    .edit-time-block > input {
+        width: 100%;
+    }
+
+    .time-block > span,
+    .edit-time-block > span {
+        display: none;
+    }
+
+    #schedule-grid {
+        min-width: 46rem;
+    }
+
+    #schedule-grid th,
+    #schedule-grid td {
+        min-width: 6rem;
+    }
+
+    #schedule-grid th:first-child,
+    #schedule-grid td:first-child {
+        min-width: 4rem;
+    }
+
+    #prerequisites-graph {
+        min-width: 48rem;
+    }
+
+    #graph-container {
+        min-width: 48rem;
+    }
+
+    table {
+        font-size: 0.8125rem;
     }
 }
 

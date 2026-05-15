@@ -341,13 +341,22 @@ const App = {
     },
 
     /**
-     * Register service worker for PWA
+     * Clear stale service workers/caches.
+     * The app does not ship a sw.js file, so an old registration can serve cached UI.
      */
-    registerServiceWorker() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js').catch(() => {
-                // Service worker not available, that's fine
-            });
+    async registerServiceWorker() {
+        if (!('serviceWorker' in navigator)) return;
+
+        try {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            await Promise.all(registrations.map(registration => registration.unregister()));
+
+            if ('caches' in window) {
+                const cacheNames = await caches.keys();
+                await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+            }
+        } catch (error) {
+            console.warn('Could not clear stale service worker cache:', error);
         }
     },
 

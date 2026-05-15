@@ -99,6 +99,7 @@ class StorageManager {
             };
             this.setLocal('planes', [defaultPlan]);
             this.setLocal('planActivo', 'default');
+            this.setLocal('planPrincipal', 'default');
             return [defaultPlan];
         }
         return planes;
@@ -123,12 +124,13 @@ class StorageManager {
      */
     getPlanActivo() {
         const planActivo = this.getLocal('planActivo');
-        if (!planActivo) {
-            // Ensure default plan exists
-            this.getPlanes();
-            return 'default';
+        if (planActivo && this.getPlan(planActivo)) {
+            return planActivo;
         }
-        return planActivo;
+
+        const planPrincipal = this.getPlanPrincipal();
+        this.setLocal('planActivo', planPrincipal);
+        return planPrincipal;
     }
 
     /**
@@ -139,6 +141,37 @@ class StorageManager {
         if (plan) {
             this.setLocal('planActivo', planId);
             window.dispatchEvent(new CustomEvent('planChanged', { detail: { planId } }));
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Get the main study plan ID
+     */
+    getPlanPrincipal() {
+        const planes = this.getPlanes();
+        const planPrincipal = this.getLocal('planPrincipal');
+        if (planPrincipal && planes.some(p => p.id === planPrincipal)) {
+            return planPrincipal;
+        }
+
+        const fallback = planes.some(p => p.id === 'default') ? 'default' : planes[0]?.id;
+        if (fallback) {
+            this.setLocal('planPrincipal', fallback);
+            return fallback;
+        }
+        return 'default';
+    }
+
+    /**
+     * Set the main study plan
+     */
+    setPlanPrincipal(planId) {
+        const plan = this.getPlan(planId);
+        if (plan) {
+            this.setLocal('planPrincipal', planId);
+            window.dispatchEvent(new CustomEvent('planPrincipalChanged', { detail: { planId } }));
             return true;
         }
         return false;
@@ -218,9 +251,16 @@ class StorageManager {
         this.removeLocal(`${planId}_calificaciones`);
         this.removeLocal(`${planId}_clases`);
         
-        // If deleted plan was active, switch to default
+        const fallbackPlanId = planes.some(p => p.id === 'default') ? 'default' : planes[0]?.id;
+
+        // If deleted plan was main, switch main plan to default or first available
+        if (this.getPlanPrincipal() === planId && fallbackPlanId) {
+            this.setPlanPrincipal(fallbackPlanId);
+        }
+
+        // If deleted plan was active, switch to main plan
         if (this.getPlanActivo() === planId) {
-            this.setPlanActivo('default');
+            this.setPlanActivo(this.getPlanPrincipal());
         }
         
         return true;

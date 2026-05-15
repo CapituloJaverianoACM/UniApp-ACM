@@ -5,24 +5,24 @@
 {% block content %}
 <div class="space-y-6">
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-            <div class="flex items-center gap-3">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-3">
                 <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Mi Pensum</h1>
                 <!-- Plan Selector Dropdown -->
-                <div class="relative" id="plan-selector-container">
+                <div class="relative w-full sm:w-auto" id="plan-selector-container">
                     <button onclick="togglePlanDropdown()" id="plan-selector-btn"
-                            class="inline-flex items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            class="inline-flex w-full sm:w-auto items-center px-3 py-1.5 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                         <svg class="w-4 h-4 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                         </svg>
-                        <span id="plan-selector-name">Mi Plan de Estudios</span>
-                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <span id="plan-selector-name" class="truncate">Mi Plan de Estudios</span>
+                        <svg class="w-4 h-4 ml-auto sm:ml-2 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
                     <!-- Dropdown Menu -->
-                    <div id="plan-dropdown" class="hidden absolute left-0 mt-2 w-72 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
+                    <div id="plan-dropdown" class="hidden absolute left-0 mt-2 w-full sm:w-72 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 z-50 overflow-hidden">
                         <div class="p-2 border-b border-gray-200 dark:border-gray-700">
                             <p class="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase px-2">Mis Planes de Estudio</p>
                         </div>
@@ -51,9 +51,9 @@
             </div>
             <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Visualiza y gestiona tu plan de estudios</p>
         </div>
-        <div class="flex flex-wrap gap-2">
+        <div class="pensum-actions flex flex-col lg:flex-row lg:flex-wrap gap-2 lg:justify-end tablet-stack-actions">
             <!-- Undo/Redo Buttons -->
-            <div class="inline-flex items-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-hidden">
+            <div class="pensum-history-control inline-flex items-center rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 overflow-hidden">
                 <button onclick="performUndo()" id="undo-btn" disabled
                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-400 dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                         title="Deshacer (Ctrl+Z)">
@@ -79,7 +79,7 @@
                 </button>
             </div>
             <button onclick="toggleSimulationMode()" id="sim-toggle-btn"
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
+                    class="inline-flex w-full lg:w-auto justify-center items-center px-3 sm:px-4 py-2 text-sm font-medium text-indigo-700 dark:text-indigo-300 bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700 rounded-lg hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors"
                     aria-label="Activar modo simulación de semestre"
                     title="Simula qué materias podrías inscribir el próximo semestre">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,7 +88,7 @@
                 <span id="sim-toggle-text">Simular Semestre</span>
             </button>
             <button onclick="openImportModal()" 
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    class="inline-flex w-full lg:w-auto justify-center items-center px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     aria-label="Importar pensum desde archivo JSON"
                     title="Cargar materias desde un archivo JSON">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -97,7 +97,7 @@
                 Importar
             </button>
             <button onclick="exportPensum()" 
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                    class="inline-flex w-full lg:w-auto justify-center items-center px-3 sm:px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
                     aria-label="Exportar pensum a archivo JSON"
                     title="Descargar todas las materias como archivo JSON">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -106,7 +106,7 @@
                 Exportar
             </button>
             <button onclick="openNewMateriaModal()" 
-                    class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-accent-500 rounded-lg hover:bg-accent-600 transition-colors"
+                    class="inline-flex w-full lg:w-auto justify-center items-center px-3 sm:px-4 py-2 text-sm font-medium text-white bg-accent-500 rounded-lg hover:bg-accent-600 transition-colors"
                     aria-label="Agregar nueva materia"
                     title="Crear una nueva materia en el pensum">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,8 +118,8 @@
     </div>
     
     <!-- Stats Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Promedio Acumulado</p>
@@ -132,7 +132,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Créditos Completados</p>
@@ -145,7 +145,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Materias Aprobadas</p>
@@ -158,7 +158,7 @@
                 </div>
             </div>
         </div>
-        <div class="bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
+        <div class="bg-white dark:bg-gray-800 p-3 sm:p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 transition-colors">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Progreso</p>
@@ -174,7 +174,7 @@
     </div>
     
     <!-- Search and Filters Bar -->
-    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-4 transition-colors">
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 p-3 sm:p-4 transition-colors">
         <div class="flex flex-col lg:flex-row gap-4">
             <!-- Search Input -->
             <div class="flex-1 relative">
@@ -193,7 +193,7 @@
             </div>
             
             <!-- Filter Toggles -->
-            <div class="flex flex-wrap items-center gap-2">
+            <div class="pensum-filters flex flex-col lg:flex-row lg:flex-wrap lg:items-center gap-2 tablet-stack-actions">
                 <!-- Status Filter -->
                 <div class="relative">
                     <button onclick="toggleFilterDropdown('status')" id="filter-status-btn"
@@ -207,7 +207,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div id="filter-status-dropdown" class="hidden absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 py-2">
+                    <div id="filter-status-dropdown" class="hidden absolute top-full left-0 mt-1 w-full lg:w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 py-2">
                         <label class="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
                             <input type="checkbox" value="passed" onchange="applyFilters()" class="filter-status rounded text-accent-500 focus:ring-accent-500">
                             <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">Aprobada</span>
@@ -252,7 +252,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div id="filter-semester-dropdown" class="hidden absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 py-2 max-h-64 overflow-y-auto">
+                    <div id="filter-semester-dropdown" class="hidden absolute top-full left-0 mt-1 w-full lg:w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 py-2 max-h-64 overflow-y-auto">
                         <!-- Populated by JavaScript -->
                     </div>
                 </div>
@@ -270,7 +270,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                         </svg>
                     </button>
-                    <div id="filter-credits-dropdown" class="hidden absolute top-full left-0 mt-1 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 py-2">
+                    <div id="filter-credits-dropdown" class="hidden absolute top-full left-0 mt-1 w-full lg:w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-20 py-2">
                         <label class="flex items-center px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer">
                             <input type="checkbox" value="1" onchange="applyFilters()" class="filter-credits rounded text-accent-500 focus:ring-accent-500">
                             <span class="ml-2 text-sm text-gray-700 dark:text-gray-300">1 crédito</span>
@@ -452,8 +452,9 @@
     </div>
     
     <!-- View Toggle -->
-    <div class="flex items-center justify-between">
-        <div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg transition-colors">
+    <div class="pensum-view-toggle-row flex flex-col lg:flex-row lg:items-center lg:justify-between gap-3">
+        <div class="pensum-view-toggle-wrap">
+        <div class="pensum-view-toggle flex items-center gap-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-lg transition-colors">
             <button id="view-tree" onclick="setView('tree')"
                     class="px-3 py-1 text-sm font-medium rounded-md bg-white dark:bg-gray-700 shadow-sm text-gray-700 dark:text-gray-200 transition-colors">
                 Árbol
@@ -481,10 +482,16 @@
                 </span>
             </button>
         </div>
-        <div class="flex items-center space-x-2">
-            <label class="text-sm text-gray-600 dark:text-gray-400">Simular pérdida:</label>
+        </div>
+        <div class="pensum-loss-control inline-flex flex-col sm:flex-row sm:items-center gap-2 rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 px-2.5 py-2 shadow-sm transition-colors">
+            <label for="simulate-loss-select" class="inline-flex items-center gap-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 whitespace-nowrap">
+                <svg class="h-4 w-4 text-red-400 dark:text-red-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"></path>
+                </svg>
+                Simular pérdida
+            </label>
             <select id="simulate-loss-select" onchange="simulateLoss(this.value)"
-                    class="text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:ring-accent-500 focus:border-accent-500 transition-colors">
+                    class="w-full sm:w-64 text-sm border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white rounded-lg focus:ring-accent-500 focus:border-accent-500 transition-colors">
                 <option value="">Seleccionar materia...</option>
             </select>
         </div>
@@ -492,8 +499,8 @@
     
     <!-- Pensum Table View -->
     <div id="pensum-table-view" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+        <div class="mobile-scroll mobile-scroll-hint">
+            <table class="min-w-[56rem] divide-y divide-gray-200 dark:divide-gray-700">
                 <thead class="bg-gray-50 dark:bg-gray-900">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Semestre</th>
@@ -529,15 +536,15 @@
     </div>
     
     <!-- Pensum Graph View (prerequisites visualization) -->
-    <div id="pensum-graph-view" class="hidden">
-        <div id="graph-card" class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors flex flex-col">
+    <div id="pensum-graph-view" class="hidden mobile-scroll mobile-scroll-hint">
+        <div id="graph-card" class="min-w-[48rem] bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden transition-colors flex flex-col">
             <!-- Graph Header -->
-            <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex items-center justify-between">
+            <div class="px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-700 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                 <div>
                     <h3 class="font-semibold text-gray-800 dark:text-white">Grafo de Prerrequisitos</h3>
                     <p class="text-sm text-gray-500 dark:text-gray-400">Visualización de dependencias entre materias</p>
                 </div>
-                <div class="flex items-center space-x-2">
+                <div class="flex flex-wrap items-center gap-2 tablet-stack-actions">
                     <button onclick="resetGraphZoom()" class="px-3 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
@@ -873,12 +880,12 @@
 <div id="simulation-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80" onclick="closeSimulationModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full p-6 transition-colors">
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-2xl w-full p-4 sm:p-6 transition-colors">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Simulación de Pérdida</h3>
             <div id="simulation-results" class="space-y-4">
                 <!-- Results will be populated here -->
             </div>
-            <div class="mt-6 flex justify-end">
+            <div class="mt-6 flex justify-end mobile-actions">
                 <button onclick="closeSimulationModal()" class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                     Cerrar
                 </button>
@@ -891,11 +898,11 @@
 <div id="materia-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80" onclick="closeMateriaModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6 transition-colors">
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-4 sm:p-6 transition-colors">
             <h3 id="materia-modal-title" class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Nueva Materia</h3>
             <form id="materia-form" class="space-y-4">
                 <input type="hidden" id="materia-edit-code">
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 mobile-grid-1">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Código</label>
                         <input type="text" id="materia-code" required maxlength="20"
@@ -932,7 +939,7 @@
                         <option value="electivas">Electivas</option>
                     </select>
                 </div>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-2 gap-4 mobile-grid-1">
                     <div>
                         <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Semestre</label>
                         <input type="number" id="materia-semester" required min="1" max="15"
@@ -961,7 +968,7 @@
                 <!-- Status and Grade Section (only visible when editing) -->
                 <div id="materia-status-grade-section" class="hidden border-t dark:border-gray-700 pt-4 mt-4">
                     <h4 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Estado y Calificación</h4>
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-4 mobile-grid-1">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Estado</label>
                             <select id="materia-status"
@@ -985,7 +992,7 @@
                     </p>
                 </div>
                 
-                <div class="flex justify-end space-x-3 pt-4">
+                <div class="flex justify-end gap-3 pt-4 mobile-actions">
                     <button type="button" onclick="closeMateriaModal()"
                             class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
                         Cancelar
@@ -1004,7 +1011,7 @@
 <div id="new-plan-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80" onclick="closeNewPlanModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6 transition-colors">
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-4 sm:p-6 transition-colors">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Crear Nuevo Plan de Estudios</h3>
             <div class="space-y-4">
                 <div>
@@ -1030,7 +1037,7 @@
                     <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Copia las materias y calificaciones de otro plan</p>
                 </div>
             </div>
-            <div class="flex justify-end space-x-3 mt-6">
+            <div class="flex justify-end gap-3 mt-6 mobile-actions">
                 <button onclick="closeNewPlanModal()"
                         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
                     Cancelar
@@ -1048,12 +1055,12 @@
 <div id="manage-plans-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80" onclick="closeManagePlansModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6 transition-colors">
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-4 sm:p-6 transition-colors">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Administrar Planes de Estudio</h3>
             <div id="manage-plans-list" class="space-y-3 max-h-96 overflow-y-auto">
                 <!-- Plans will be rendered here -->
             </div>
-            <div class="flex justify-end mt-6">
+            <div class="flex justify-end mt-6 mobile-actions">
                 <button onclick="closeManagePlansModal()"
                         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
                     Cerrar
@@ -1067,7 +1074,7 @@
 <div id="edit-plan-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80" onclick="closeEditPlanModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-6 transition-colors">
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-md w-full p-4 sm:p-6 transition-colors">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Editar Plan</h3>
             <input type="hidden" id="edit-plan-id">
             <div class="space-y-4">
@@ -1082,7 +1089,7 @@
                               class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent"></textarea>
                 </div>
             </div>
-            <div class="flex justify-end space-x-3 mt-6">
+            <div class="flex justify-end gap-3 mt-6 mobile-actions">
                 <button onclick="closeEditPlanModal()"
                         class="px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-700 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600">
                     Cancelar
@@ -1100,11 +1107,11 @@
 <div id="import-modal" class="hidden fixed inset-0 z-50 overflow-y-auto">
     <div class="flex items-center justify-center min-h-screen px-4">
         <div class="fixed inset-0 bg-gray-500 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-80" onclick="closeImportModal()"></div>
-        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-6 transition-colors">
+        <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-xl max-w-lg w-full p-4 sm:p-6 transition-colors">
             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Importar Pensum</h3>
             <div class="space-y-4">
                 <!-- Template Download -->
-                <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex items-center justify-between">
+                <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-800 rounded-lg p-3 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
                     <div class="flex items-center">
                         <svg class="w-5 h-5 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
@@ -1121,7 +1128,7 @@
                     </a>
                 </div>
                 
-                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
+                <div class="border-2 border-dashed border-gray-300 rounded-lg p-5 sm:p-8 text-center">
                     <input type="file" id="import-file" accept=".json" class="hidden" onchange="handleImportFile(event)">
                     <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
@@ -1140,7 +1147,7 @@
                 </div>
                 <div id="import-error" class="hidden text-sm text-red-600"></div>
             </div>
-            <div class="flex justify-end space-x-3 mt-6">
+            <div class="flex justify-end gap-3 mt-6 mobile-actions">
                 <button onclick="closeImportModal()"
                         class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200">
                     Cancelar
@@ -1155,7 +1162,7 @@
 </div>
 
 <!-- History Panel (Slide-out) -->
-<div id="history-panel" class="fixed inset-y-0 right-0 w-80 bg-white dark:bg-gray-800 shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50">
+<div id="history-panel" class="fixed inset-y-0 right-0 w-full max-w-sm bg-white dark:bg-gray-800 shadow-xl transform translate-x-full transition-transform duration-300 ease-in-out z-50">
     <div class="flex flex-col h-full">
         <!-- Header -->
         <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
@@ -1303,9 +1310,11 @@
         
         const planes = storage.getPlanes();
         const planActivo = storage.getPlanActivo();
+        const planPrincipal = storage.getPlanPrincipal();
         
         listEl.innerHTML = planes.map(plan => {
             const isActive = plan.id === planActivo;
+            const isPrincipal = plan.id === planPrincipal;
             const materias = storage.getLocal(plan.id === 'default' ? 'materias' : `${plan.id}_materias`) || [];
             const passedCount = materias.filter(m => m.estado === 'passed').length;
             
@@ -1319,7 +1328,10 @@
                             </svg>
                         ` : '<div class="w-4 h-4 mr-2 flex-shrink-0"></div>'}
                         <div class="min-w-0">
-                            <p class="text-sm font-medium text-gray-900 dark:text-white truncate">${plan.nombre}</p>
+                            <div class="flex items-center gap-2">
+                                <p class="text-sm font-medium text-gray-900 dark:text-white truncate">${plan.nombre}</p>
+                                ${isPrincipal ? '<span class="px-1.5 py-0.5 text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 rounded-full">Principal</span>' : ''}
+                            </div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">${materias.length} materias · ${passedCount} aprobadas</p>
                         </div>
                     </div>
@@ -1396,24 +1408,34 @@
         
         const planes = storage.getPlanes();
         const planActivo = storage.getPlanActivo();
+        const planPrincipal = storage.getPlanPrincipal();
         
         listEl.innerHTML = planes.map(plan => {
             const isDefault = plan.id === 'default';
             const isActive = plan.id === planActivo;
+            const isPrincipal = plan.id === planPrincipal;
             const materias = storage.getLocal(plan.id === 'default' ? 'materias' : `${plan.id}_materias`) || [];
             
             return `
-                <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg ${isActive ? 'ring-2 ring-indigo-500' : ''}">
+                <div class="flex items-center justify-between gap-3 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg ${isActive ? 'ring-2 ring-indigo-500' : ''} tablet-stack-actions">
                     <div class="min-w-0 flex-1">
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <p class="font-medium text-gray-900 dark:text-white truncate">${plan.nombre}</p>
                             ${isActive ? '<span class="px-2 py-0.5 text-xs bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300 rounded-full">Activo</span>' : ''}
-                            ${isDefault ? '<span class="px-2 py-0.5 text-xs bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-full">Principal</span>' : ''}
+                            ${isPrincipal ? '<span class="px-2 py-0.5 text-xs bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 rounded-full">Principal</span>' : ''}
+                            ${isDefault ? '<span class="px-2 py-0.5 text-xs bg-gray-200 dark:bg-gray-600 text-gray-600 dark:text-gray-300 rounded-full">Base</span>' : ''}
                         </div>
                         <p class="text-sm text-gray-500 dark:text-gray-400">${plan.descripcion || 'Sin descripción'}</p>
                         <p class="text-xs text-gray-400 dark:text-gray-500 mt-1">${materias.length} materias</p>
                     </div>
                     <div class="flex items-center gap-1 ml-3">
+                        ${!isPrincipal ? `
+                            <button onclick="setPrincipalPlan('${plan.id}')"
+                                    class="px-3 py-2 text-xs font-medium text-amber-700 dark:text-amber-300 bg-amber-50 dark:bg-amber-900/30 hover:bg-amber-100 dark:hover:bg-amber-900/50 rounded-lg transition-colors"
+                                    title="Establecer como plan principal">
+                                Principal
+                            </button>
+                        ` : ''}
                         <button onclick="openEditPlanModal('${plan.id}')" 
                                 class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-lg transition-colors"
                                 title="Editar">
@@ -1434,6 +1456,17 @@
                 </div>
             `;
         }).join('');
+    }
+
+    function setPrincipalPlan(planId) {
+        if (!storage.setPlanPrincipal(planId)) {
+            showToast('No se pudo establecer el plan principal', 'error');
+            return;
+        }
+
+        renderPlanList();
+        renderManagePlansList();
+        showToast('Plan principal actualizado', 'success');
     }
     
     // ==================== EDIT PLAN MODAL ====================
@@ -1603,7 +1636,7 @@
             'dropped': { border: 'border-yellow-400 dark:border-yellow-500', bg: 'bg-yellow-50 dark:bg-yellow-900/30' }
         };
         
-        let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">';
+        let html = '<div class="grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-4">';
         
         for (let sem = 1; sem <= maxSem; sem++) {
             const semMaterias = bySemester[sem] || [];

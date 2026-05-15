@@ -38,6 +38,14 @@ def create_app(config_name: str = None) -> Flask:
     
     # Load configuration
     app.config.from_object(config[config_name])
+
+    if app.config.get('DEBUG'):
+        @app.after_request
+        def add_dev_no_cache_headers(response):
+            response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+            response.headers['Pragma'] = 'no-cache'
+            response.headers['Expires'] = '0'
+            return response
     
     # Register blueprints
     from app.blueprints.pensum import pensum_bp
@@ -57,8 +65,17 @@ def create_app(config_name: str = None) -> Flask:
     def inject_globals():
         # VERCEL_GIT_COMMIT_SHA is provided by Vercel during deployment
         commit_sha = os.environ.get('VERCEL_GIT_COMMIT_SHA', '')
+
+        def asset_version(filename: str) -> str:
+            asset_path = Path(app.static_folder) / filename
+            try:
+                return str(int(asset_path.stat().st_mtime))
+            except OSError:
+                return 'dev'
+
         return {
-            'commit_sha': commit_sha[:7] if commit_sha else 'dev'
+            'commit_sha': commit_sha[:7] if commit_sha else 'dev',
+            'asset_version': asset_version
         }
     
     # Register main route
