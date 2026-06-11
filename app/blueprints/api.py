@@ -669,7 +669,10 @@ def calculate_course_grade():
 
 @api_bp.route('/parser/parse', methods=['POST'])
 def parse_raw_classes():
-    """Parse raw HTML data obtained from intranet"""
+    """
+    Parse raw HTML data obtained from intranet
+    Needs to be provided as a string in the 'raw_html' field of the request body
+    """
 
     data = request.get_json()
     raw_html = data.get('raw_html')

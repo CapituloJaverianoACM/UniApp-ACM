@@ -4,35 +4,24 @@ Service defined for parsing raw intranet data obtained from request of searching
 """
 from datetime import datetime
 from typing import Dict, Optional, Any
+
+from soupsieve import match
 from app.blueprints.pensum import index
 from app.models.clase import Clase, BloqueHorario, DayOfWeek
 from bs4 import BeautifulSoup
 from bs4 import XMLParsedAsHTMLWarning
 import warnings
-warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning)
 import re
 
-
-"""
-{
-    "codigo_materia": "MAT101",
-    "nombre_materia": "Cálculo I",
-    "seccion": "A1",
-    "profesor": "Dr. García",
-    "creditos": 4,
-    "bloques": [
-        { "dia": "L", "hora_inicio": "07:00", "hora_fin": "09:00" },
-        { "dia": "W", "hora_inicio": "07:00", "hora_fin": "09:00" }
-    ]
-},
-"""
-
+warnings.filterwarnings("ignore", category=XMLParsedAsHTMLWarning) # Ingore warnings about parsing HTML as XML
 
 class ParserService:
     """
     Service for parsing raw data class input
     and returning json serializable data for the API response.
     """
+
+    # Constants to identify the codes used in the classes in the html
     GROUPBOX_PATTERN = re.compile(r"^win0divSSR_CLSRSLT_WRK_GROUPBOX2\$\d+$")
     CLASS_NBR_PATTERN = re.compile(r"^MTG_CLASS_NBR\$\d+$")
     HEADER_CLASS = "PAGROUPBOXLABELLEVEL1"
@@ -60,6 +49,11 @@ class ParserService:
 
     @staticmethod
     def parse_header(header_text: str) -> tuple[str, str, Optional[str]]:
+        """
+        Function to parse the header of the groupbox and extract subject, catalog number and course name.
+        """ 
+
+
         subject = ""
         catalog_number = ""
         course = ""
@@ -83,6 +77,10 @@ class ParserService:
     
     @staticmethod
     def extract_element_text(container: BeautifulSoup, base_id: str, index: str, separator: str = " | ") -> Optional[str]:
+        """
+        Function to extract text from an element given a base id and index.
+        """
+        
         target_id = f"{base_id}${index}"
         el = container.find(id=target_id)
         if el:
@@ -91,6 +89,9 @@ class ParserService:
     
     @staticmethod 
     def extract_status(container: BeautifulSoup, index: str) -> Optional[str]:
+        """
+        Function to extract the status from an element given a base id and index.
+        """
         target_id = f"{ParserService.STATUS_BASE_ID}${index}"
         status_container = container.find(id=target_id) or container.find(id=f"win0div{ParserService.STATUS_BASE_ID}${index}")
         if status_container:
@@ -101,14 +102,16 @@ class ParserService:
     
     @staticmethod
     def time_parser(days_times_str: Optional[str]) -> list[Dict[str, str]]:
+        """
+        Function to parse the days and times string and return a list of dictionaries with day, start time and end time.
+        """
+
         bloques = []
-        
         clean_str = days_times_str.split('|')[0].strip()
         entries = [e.strip() for e in clean_str.split(',')]
-        
         for entry in entries:
             match = re.search(r"([A-Za-záéíóúÁÉÍÓÚ]+)\s+(\d{1,2}:\d{2}[AP]M)\s*-\s*(\d{1,2}:\d{2}[AP]M)", entry, re.IGNORECASE)
-            
+
             if match:
                 dia_str, hora_inicio_str, hora_fin_str = match.groups()
                 dia_normalized = ParserService.DAY_MAPPING.get(dia_str.capitalize(), dia_str[0].upper())
@@ -123,9 +126,9 @@ class ParserService:
                     "dia": dia_normalized,
                     "hora_inicio": h_inicio,
                     "hora_fin": h_fin
-                })
-                
+                }) 
         return bloques 
+    
     @staticmethod
     def clean_whitespace(text: Optional[str]) -> Optional[str]:
         if not text:
@@ -181,6 +184,11 @@ class ParserService:
 
     @staticmethod
     def parse_class_row(gb: BeautifulSoup, idx: str, subject: str, number: str, course: Optional[str]) -> Dict[str, Any]:
+        """
+        Function to parse a class row, returning a dictionary of the needed information for the API response. 
+        """
+
+
         raw_materia = ParserService.extract_element_text(gb, ParserService.FIELD_BASE_IDS["class_number"], idx)
         raw_profesor = ParserService.extract_element_text(gb, ParserService.FIELD_BASE_IDS["instructor"], idx)
         raw_salon = ParserService.extract_element_text(gb, ParserService.FIELD_BASE_IDS["room"], idx)
@@ -203,6 +211,10 @@ class ParserService:
 
     @staticmethod
     def parse_groupbox(gb: BeautifulSoup) -> list[Dict[str, Any]]:
+        """
+        Function to parse a groupbox and extract all the class information within it.
+        """
+
         header = gb.find(class_=ParserService.HEADER_CLASS) 
         header_text = header.get_text(strip=True) if header else ""
         subject, number, course = ParserService.parse_header(header_text)
@@ -222,6 +234,10 @@ class ParserService:
 
     @staticmethod
     def parse_raw_data(raw_data: str) -> list[Dict[str, Any]]:
+        """
+        Function to parse the raw HTML data and returning a list of dictionaries with the classes information.
+        """
+
         soup = BeautifulSoup(raw_data, 'lxml')
         extracted_clases = []
 
