@@ -198,7 +198,7 @@ class ParserService:
             "codigo_materia": ParserService.clean_whitespace(raw_materia),
             "nombre_materia": ParserService.clean_course_name(course),
             "profesor": ParserService.clean_professor_name(raw_profesor),
-            "creditos": None,
+            "creditos": 1,
             "bloques": ParserService.time_parser(ParserService.extract_element_text(gb, ParserService.FIELD_BASE_IDS["days_times"], idx)),
 
             # Aditional information obtained 
@@ -233,6 +233,32 @@ class ParserService:
         return classes
 
     @staticmethod
+    def obtain_subjects(classes: list[Dict[str, Any]]) -> list[Dict[str, Any]]:
+        """
+        Function to obtain unique subjects given the list of classes
+        """
+        unique_subjects = {}
+
+        for cls in classes:
+            nombre = cls.get("nombre_materia")
+
+            if nombre and nombre not in unique_subjects:
+                unique_subjects[nombre] = {
+                    "nombre": nombre,
+                    "codigo": cls.get(""),
+                    "creditos": cls.get("creditos"),
+                    "semestre": 1,
+                    "prerrequisitos": [],
+                    "correquisitos": [],
+                    "estado": "pending",
+                    "color": "#5091AF",
+                    "tipo": 'basicas'
+                }
+                
+        return list(unique_subjects.values())
+
+
+    @staticmethod
     def parse_raw_data(raw_data: str) -> list[Dict[str, Any]]:
         """
         Function to parse the raw HTML data and returning a list of dictionaries with the classes information.
@@ -250,7 +276,8 @@ class ParserService:
                     extracted_clases.extend(results)
         
         result_dict = {
-            "clases": extracted_clases
+            "clases": extracted_clases,
+            "materias": ParserService.obtain_subjects(extracted_clases)
         }
 
         return result_dict
