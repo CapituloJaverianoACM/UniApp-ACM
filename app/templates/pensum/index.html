@@ -1583,6 +1583,13 @@
         loadPensumData();
         updatePlanSelectorUI();
         closePlanDropdown();
+        // Rebuild graph if currently visible
+        if (currentView === 'graph' && graphState.canvas) {
+            buildGraphData();
+            calculateNodePositions();
+            findBottlenecks();
+            drawGraph();
+        }
     });
     
     // ==================== PLAN SELECTOR FUNCTIONS ====================
@@ -4579,8 +4586,9 @@
     }
     
     function findBottlenecks() {
-        // Find nodes that unlock the most other nodes
+        // Find nodes that unlock the most other nodes (excluding passed ones)
         const bottlenecks = graphState.nodes
+            .filter(node => node.status !== 'passed')
             .map(node => ({
                 node,
                 dependentCount: getAllDependents(node.id).size
@@ -4932,13 +4940,16 @@
         console.log('Stats view initialized');
     }
     
-    // Redraw charts when theme changes
+    // Redraw charts and graph when theme changes
     window.addEventListener('themechange', () => {
         if (currentView === 'stats') {
             renderGPAChart();
             renderCreditsChart();
             renderGradesChart();
             renderTypesChart();
+        }
+        if (currentView === 'graph' && graphState.canvas) {
+            drawGraph();
         }
     });
     
