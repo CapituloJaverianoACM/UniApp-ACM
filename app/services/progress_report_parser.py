@@ -115,7 +115,10 @@ def build_output(raw_rows:list) -> dict:
 
     subjects = []
     grades = []
+    validated = []
     seen = set()
+
+    VALIDATED_CODES = {'38068'}
 
     for row in raw_rows:
         if len(row) <7:
@@ -131,6 +134,15 @@ def build_output(raw_rows:list) -> dict:
 
         grade=try_float(grade_str)
         seen.add(course)
+
+        if course in VALIDATED_CODES:
+            validated.append({
+                'codigo': course,
+                'nombre': title,
+                'creditos': int(cred),
+            })
+            continue
+
         semester= cicles_map.get(cicle,1)
 
         if grade is not None:
@@ -138,16 +150,19 @@ def build_output(raw_rows:list) -> dict:
         else:
             status = 'passed' if Type == 'Si' else 'pending'
 
+        template_match = template_lookup.get(course, {})
+        materia_tipo = template_match.get('tipo') or Type
+
         subjects.append ({
             'codigo': course,
             'nombre': title,
             'creditos': int(cred),
             'semestre': semester,
-            'prerrequisitos': template_lookup.get(course, {}).get('prerrequisitos', []),
-            'correquisitos': template_lookup.get(course, {}).get('correquisitos', []),
+            'prerrequisitos': template_match.get('prerrequisitos', []),
+            'correquisitos': template_match.get('correquisitos', []),
             'estado': status,
-            'color': template_lookup.get(course, {}).get('color', TIPO_COLORS.get(Type, '#5091AF')),
-            'tipo': template_lookup.get(course, {}).get('tipo', Type),
+            'color': template_match.get('color', TIPO_COLORS.get(materia_tipo, '#5091AF')),
+            'tipo': materia_tipo,
         })
         if grade is not None:
             grades.append({
@@ -161,4 +176,5 @@ def build_output(raw_rows:list) -> dict:
         'source': 'informe_avance',
         'materias': subjects,
         'calificaciones': grades,
+        'creditos_validados': validated,
     }

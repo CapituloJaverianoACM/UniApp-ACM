@@ -180,6 +180,23 @@
         </div>
     </div>
 
+    <!-- Créditos Validados (special courses like Selec Representativas - Magis) -->
+    <div id="validated-credits-banner" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 px-4 py-3 transition-colors">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0">
+                <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">Créditos Validados</p>
+                <p class="text-sm font-bold text-gray-900 dark:text-white">
+                    <span id="validated-credits-count">0</span> créditos electivos validados fuera de plan
+                </p>
+            </div>
+        </div>
+    </div>
+
     <!-- Graduation Date Banner -->
     <div id="graduation-banner" class="hidden bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 px-4 py-3 transition-colors">
         <div class="flex flex-wrap items-center justify-between gap-3">
@@ -2415,9 +2432,10 @@
         const totalCredits = materias.reduce((s, m) => s + (m.creditos || 0), 0);
         const passedMaterias = materias.filter(m => m.estado === 'passed');
         const completedCredits = passedMaterias.reduce((s, m) => s + (m.creditos || 0), 0);
+        const validatedCredits = storage.getTotalValidatedCredits();
         
-        document.getElementById('stat-credits-done').textContent = completedCredits;
-        document.getElementById('stat-credits-total').textContent = totalCredits;
+        document.getElementById('stat-credits-done').textContent = completedCredits + validatedCredits;
+        document.getElementById('stat-credits-total').textContent = totalCredits + validatedCredits;
         document.getElementById('stat-passed').textContent = passedMaterias.length;
         
         // Progress
@@ -2447,6 +2465,20 @@
         }
 
         updateGraduationBanner(materias);
+        updateValidatedCreditsBanner();
+    }
+
+    function updateValidatedCreditsBanner() {
+        const banner = document.getElementById('validated-credits-banner');
+        if (!banner) return;
+        const validated = storage.getValidatedCredits();
+        if (validated.length > 0) {
+            const total = validated.reduce((s, c) => s + (c.creditos || 0), 0);
+            document.getElementById('validated-credits-count').textContent = total;
+            banner.classList.remove('hidden');
+        } else {
+            banner.classList.add('hidden');
+        }
     }
 
     function updateGraduationBanner(materias) {
@@ -3108,12 +3140,14 @@
         
         let materias = [];
         let calificaciones = [];
+        let creditos_validados = [];
         
         if (Array.isArray(importData)) {
             materias = importData;
         } else if (importData.materias) {
             materias = importData.materias;
             calificaciones = importData.calificaciones || [];
+            creditos_validados = importData.creditos_validados || [];
         }
         
         // Import materias
@@ -3148,6 +3182,11 @@
                 calificacionesImported++;
             }
         });
+        
+        // Import validated credits
+        if (creditos_validados.length > 0) {
+            storage.saveValidatedCredits(creditos_validados);
+        }
         
         closeImportModal();
         loadPensumData();
@@ -5075,6 +5114,7 @@
         const creditsPending = pending.reduce((sum, m) => sum + (m.creditos || 0), 0) +
                                failed.reduce((sum, m) => sum + (m.creditos || 0), 0);
         const totalCredits = materias.reduce((sum, m) => sum + (m.creditos || 0), 0);
+        const validatedCredits = storage.getTotalValidatedCredits();
         
         // GPA (Índice académico = promedio ponderado por créditos)
         const gpa = calculateGPA(materias);
@@ -5086,7 +5126,7 @@
         document.getElementById('stats-passed-count').textContent = passed.length;
         document.getElementById('stats-pending-count').textContent = pending.length + failed.length;
         document.getElementById('stats-failed-count').textContent = failed.length;
-        document.getElementById('stats-credits-done').textContent = creditsDone;
+        document.getElementById('stats-credits-done').textContent = creditsDone + validatedCredits;
         document.getElementById('stats-credits-enrolled').textContent = creditsEnrolled;
         document.getElementById('stats-credits-pending').textContent = creditsPending;
         
@@ -5258,11 +5298,12 @@
         const enrolled = materias.filter(m => m.estado === 'enrolled').reduce((sum, m) => sum + (m.creditos || 0), 0);
         const pending = materias.filter(m => m.estado === 'pending').reduce((sum, m) => sum + (m.creditos || 0), 0);
         const failed = materias.filter(m => m.estado === 'failed').reduce((sum, m) => sum + (m.creditos || 0), 0);
+        const validated = storage.getTotalValidatedCredits();
         
         const isDarkMode = document.documentElement.getAttribute('data-theme') === 'dark';
         
         drawDonutChart(ctx, canvas, {
-            data: [passed, enrolled, pending, failed],
+            data: [passed + validated, enrolled, pending, failed],
             labels: ['Aprobados', 'Cursando', 'Pendientes', 'Reprobados'],
             colors: ['#22c55e', '#3b82f6', '#9ca3af', '#ef4444'],
             textColor: isDarkMode ? '#ffffff' : '#374151'

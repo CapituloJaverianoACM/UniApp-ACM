@@ -147,15 +147,16 @@ const Pensum = {
     updateStats() {
         // Total credits
         const totalCredits = this.materias.reduce((sum, m) => sum + (m.creditos || 0), 0);
+        const validatedCredits = storage.getTotalValidatedCredits();
         const creditosElement = document.getElementById('totalCreditos');
-        if (creditosElement) creditosElement.textContent = totalCredits;
+        if (creditosElement) creditosElement.textContent = totalCredits + validatedCredits;
 
         // Completed credits
         const completedCredits = this.materias
             .filter(m => m.estado === 'passed')
             .reduce((sum, m) => sum + (m.creditos || 0), 0);
         const completadosElement = document.getElementById('creditosCompletados');
-        if (completadosElement) completadosElement.textContent = completedCredits;
+        if (completadosElement) completadosElement.textContent = completedCredits + validatedCredits;
 
         // Progress percentage
         const progressElement = document.getElementById('progresoCarrera');

@@ -487,6 +487,31 @@ class StorageManager {
         return this.saveCalificaciones(calificaciones);
     }
 
+    // ==================== CREDITOS VALIDADOS (VALIDATED CREDITS) ====================
+
+    /**
+     * Get validated credits (special courses like 38068 that count as electives)
+     */
+    getValidatedCredits() {
+        const prefix = this._getPlanPrefix();
+        return this.getLocal(`${prefix}creditos_validados`) || [];
+    }
+
+    /**
+     * Save validated credits
+     */
+    saveValidatedCredits(credits) {
+        const prefix = this._getPlanPrefix();
+        return this.setLocal(`${prefix}creditos_validados`, credits);
+    }
+
+    /**
+     * Get total validated credits count
+     */
+    getTotalValidatedCredits() {
+        return this.getValidatedCredits().reduce((sum, c) => sum + (c.creditos || 0), 0);
+    }
+
     // ==================== CONFIGURACION ====================
 
     /**
@@ -554,7 +579,7 @@ class StorageManager {
 
         try {
             // Sync each data type
-            const dataTypes = ['materias', 'clases', 'franjas', 'calificaciones', 'configuracion', 'selectedSchedule'];
+            const dataTypes = ['materias', 'clases', 'franjas', 'calificaciones', 'configuracion', 'selectedSchedule', 'creditos_validados'];
             
             for (const dataType of dataTypes) {
                 try {
@@ -665,7 +690,8 @@ class StorageManager {
                 franjas: this.getFranjas(),
                 calificaciones: this.getCalificaciones(),
                 configuracion: this.getConfiguracion(),
-                selectedSchedule: this.getSelectedSchedule()
+                selectedSchedule: this.getSelectedSchedule(),
+                creditos_validados: this.getValidatedCredits()
             }
         };
     }
@@ -740,6 +766,12 @@ class StorageManager {
                 results.imported.push('configuracion');
             }
 
+            // Import creditos_validados (always overwrite if provided)
+            if (data.creditos_validados) {
+                this.saveValidatedCredits(data.creditos_validados);
+                results.imported.push('creditos_validados');
+            }
+
         } catch (error) {
             results.success = false;
             results.errors.push(error.message);
@@ -752,7 +784,7 @@ class StorageManager {
      * Clear all local data
      */
     clearAll() {
-        const keys = ['materias', 'clases', 'franjas', 'calificaciones', 'configuracion', 'selectedSchedule', '_pendingSync'];
+        const keys = ['materias', 'clases', 'franjas', 'calificaciones', 'configuracion', 'selectedSchedule', 'creditos_validados', '_pendingSync'];
         keys.forEach(key => localStorage.removeItem(this.prefix + key));
     }
 
