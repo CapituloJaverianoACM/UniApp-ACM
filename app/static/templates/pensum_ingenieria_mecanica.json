@@ -30,13 +30,13 @@
       "prerrequisitos": [],
       "correquisitos": [],
       "estado": "pending",
-      "color": "#0284C7",
-      "tipo": "basicas"
+      "color": "#0D9488",
+      "tipo": "nucleo"
     },
     {
       "codigo": "033735",
       "nombre": "Innovación y diseño de producto",
-      "creditos": 2,
+      "creditos": 3,
       "semestre": 1,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -178,8 +178,8 @@
       ],
       "correquisitos": [],
       "estado": "pending",
-      "color": "#0D9488",
-      "tipo": "nucleo"
+      "color": "#0284C7",
+      "tipo": "basicas"
     },
     {
       "codigo": "023710",
@@ -192,8 +192,8 @@
       ],
       "correquisitos": [],
       "estado": "pending",
-      "color": "#0D9488",
-      "tipo": "nucleo"
+      "color": "#0284C7",
+      "tipo": "basicas"
     },
     {
       "codigo": "001341",
@@ -206,8 +206,8 @@
       ],
       "correquisitos": [],
       "estado": "pending",
-      "color": "#0D9488",
-      "tipo": "nucleo"
+      "color": "#0284C7",
+      "tipo": "basicas"
     },
     {
       "codigo": "002544",
@@ -225,7 +225,7 @@
     {
       "codigo": "033759",
       "nombre": "Estática y dinámica",
-      "creditos": 4,
+      "creditos": 3,
       "semestre": 4,
       "prerrequisitos": [
         "001299",
@@ -291,25 +291,20 @@
       "tipo": "nucleo"
     },
     {
-      "codigo": "033768",
-      "nombre": "Mecánica de materiales",
-      "creditos": 4,
+      "codigo": "ELEC02",
+      "nombre": "Electiva II",
+      "creditos": 2,
       "semestre": 4,
-      "prerrequisitos": [
-        "033734",
-        "001297",
-        "001340",
-        "001300"
-      ],
+      "prerrequisitos": [],
       "correquisitos": [],
       "estado": "pending",
-      "color": "#0D9488",
-      "tipo": "nucleo"
+      "color": "#4F46E5",
+      "tipo": "electivas"
     },
     {
       "codigo": "033767",
       "nombre": "Termodinámica",
-      "creditos": 4,
+      "creditos": 3,
       "semestre": 5,
       "prerrequisitos": [
         "036298"
@@ -350,7 +345,7 @@
     {
       "codigo": "033772",
       "nombre": "Diseño de máquinas",
-      "creditos": 4,
+      "creditos": 3,
       "semestre": 5,
       "prerrequisitos": [
         "033759",
@@ -362,14 +357,15 @@
       "tipo": "nucleo"
     },
     {
-      "codigo": "035758",
-      "nombre": "Proyecto de diseño en Mecánica",
+      "codigo": "033768",
+      "nombre": "Mecánica de materiales",
       "creditos": 3,
       "semestre": 5,
       "prerrequisitos": [
-        "033733",
-        "033768",
-        "033760"
+        "033734",
+        "001297",
+        "001340",
+        "001300"
       ],
       "correquisitos": [],
       "estado": "pending",
@@ -377,8 +373,8 @@
       "tipo": "nucleo"
     },
     {
-      "codigo": "ELEC02",
-      "nombre": "Electiva II",
+      "codigo": "ELEC03",
+      "nombre": "Electiva III",
       "creditos": 2,
       "semestre": 5,
       "prerrequisitos": [],
@@ -411,7 +407,7 @@
     },
     {
       "codigo": "033766",
-      "nombre": "Tranferencia de calor",
+      "nombre": "Transferencia de calor",
       "creditos": 3,
       "semestre": 6,
       "prerrequisitos": [
@@ -438,6 +434,21 @@
       "tipo": "nucleo"
     },
     {
+      "codigo": "035758",
+      "nombre": "Proyecto de diseño en Mecánica",
+      "creditos": 4,
+      "semestre": 6,
+      "prerrequisitos": [
+        "033733",
+        "033768",
+        "033760"
+      ],
+      "correquisitos": [],
+      "estado": "pending",
+      "color": "#0D9488",
+      "tipo": "nucleo"
+    },
+    {
       "codigo": "032842",
       "nombre": "Ética, tecnología e Ingeniería",
       "creditos": 2,
@@ -449,17 +460,6 @@
       "estado": "pending",
       "color": "#D97706",
       "tipo": "sociohumano"
-    },
-    {
-      "codigo": "ELEC03",
-      "nombre": "Electiva III",
-      "creditos": 2,
-      "semestre": 6,
-      "prerrequisitos": [],
-      "correquisitos": [],
-      "estado": "pending",
-      "color": "#4F46E5",
-      "tipo": "electivas"
     },
     {
       "codigo": "COMP02",
@@ -514,9 +514,7 @@
       "nombre": "Fe y compromiso del ingeniero",
       "creditos": 2,
       "semestre": 7,
-      "prerrequisitos": [
-        "035758"
-      ],
+      "prerrequisitos": [],
       "correquisitos": [],
       "estado": "pending",
       "color": "#D97706",
@@ -532,8 +530,8 @@
       ],
       "correquisitos": [],
       "estado": "pending",
-      "color": "#0D9488",
-      "tipo": "nucleo"
+      "color": "#D97706",
+      "tipo": "sociohumano"
     },
     {
       "codigo": "037236",
@@ -576,9 +574,7 @@
       "nombre": "Epistemología de la Ingeniería",
       "creditos": 2,
       "semestre": 8,
-      "prerrequisitos": [
-        "035758"
-      ],
+      "prerrequisitos": [],
       "correquisitos": [],
       "estado": "pending",
       "color": "#D97706",
@@ -587,11 +583,9 @@
     {
       "codigo": "034541",
       "nombre": "Constitución y Derecho Laboral",
-      "creditos": 3,
+      "creditos": 2,
       "semestre": 8,
-      "prerrequisitos": [
-        "035758"
-      ],
+      "prerrequisitos": [],
       "correquisitos": [],
       "estado": "pending",
       "color": "#D97706",
@@ -622,35 +616,5 @@
       "tipo": "electivas"
     }
   ],
-  "calificaciones": [],
-  "_comentarios": {
-    "estados_validos": [
-      "pending",
-      "enrolled",
-      "passed",
-      "failed",
-      "dropped"
-    ],
-    "tipos_validos": [
-      "nucleo",
-      "basicas",
-      "sociohumano",
-      "enfasis",
-      "complementarias",
-      "electivas"
-    ],
-    "tipos_descripcion": {
-      "nucleo": "Núcleo Carrera - Ciencias básicas en ingeniería + Ingeniería aplicada (mecánica, materiales, sistemas, etc.)",
-      "basicas": "Ciencias Básicas - Matemáticas, física, química, programación",
-      "sociohumano": "Institucionales - Significación Teológica, Ética, Fe y Compromiso, Epistemología, Constitución y Derecho Laboral",
-      "enfasis": "Énfasis - Especialización dentro de la carrera",
-      "complementarias": "Complementarias - Materias de apoyo",
-      "electivas": "Electivas - Materias de libre elección"
-    },
-    "color": "Color hexadecimal para la materia (ej: #5091AF)",
-    "nota_rango": "0.0 a 5.0",
-    "porcentaje_total": "Los porcentajes de componentes deberían sumar 100%, pero el cálculo funciona con cualquier porcentaje",
-    "prerrequisitos": "Array de códigos de materias que deben estar aprobadas ANTES de cursar esta materia",
-    "correquisitos": "Array de códigos de materias que deben cursarse EN EL MISMO SEMESTRE (coterminales)"
-  }
+  "calificaciones": []
 }
