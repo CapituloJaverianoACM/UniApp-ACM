@@ -84,7 +84,9 @@
       "nombre": "Física mecánica",
       "creditos": 3,
       "semestre": 2,
-      "prerrequisitos": [],
+      "prerrequisitos": [
+        "001295"
+      ],
       "correquisitos": [],
       "estado": "pending",
       "color": "#0284C7",
@@ -132,7 +134,7 @@
     {
       "codigo": "ELEC01",
       "nombre": "Electiva I",
-      "creditos": 3,
+      "creditos": 2,
       "semestre": 2,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -143,7 +145,7 @@
     {
       "codigo": "001299",
       "nombre": "Cálculo vectorial",
-      "creditos": 4,
+      "creditos": 3,
       "semestre": 3,
       "prerrequisitos": [
         "001290",
@@ -294,7 +296,7 @@
     {
       "codigo": "ELEC02",
       "nombre": "Electiva II",
-      "creditos": 3,
+      "creditos": 2,
       "semestre": 4,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -318,7 +320,7 @@
     },
     {
       "codigo": "031681",
-      "nombre": "Electrónica análoga y aplicaciones",
+      "nombre": "Electrónica analógica y aplicaciones",
       "creditos": 4,
       "semestre": 5,
       "prerrequisitos": [
@@ -350,7 +352,7 @@
       "semestre": 5,
       "prerrequisitos": [
         "033733",
-        "035759",
+        "001261",
         "030894"
       ],
       "correquisitos": [],
@@ -374,7 +376,7 @@
     {
       "codigo": "COMP01",
       "nombre": "Complementaria I",
-      "creditos": 2,
+      "creditos": 3,
       "semestre": 6,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -450,7 +452,7 @@
     {
       "codigo": "COMP02",
       "nombre": "Complementaria II",
-      "creditos": 2,
+      "creditos": 3,
       "semestre": 7,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -526,7 +528,7 @@
     {
       "codigo": "ELEC03",
       "nombre": "Electiva III",
-      "creditos": 3,
+      "creditos": 2,
       "semestre": 7,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -537,7 +539,7 @@
     {
       "codigo": "COMP03",
       "nombre": "Complementaria III",
-      "creditos": 2,
+      "creditos": 3,
       "semestre": 8,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -549,7 +551,7 @@
       "codigo": "ENF03",
       "nombre": "Énfasis III",
       "creditos": 3,
-      "semestre": 7,
+      "semestre": 8,
       "prerrequisitos": [],
       "correquisitos": [],
       "estado": "pending",
@@ -566,8 +568,8 @@
       ],
       "correquisitos": [],
       "estado": "pending",
-      "color": "#0D9488",
-      "tipo": "nucleo"
+      "color": "#D97706",
+      "tipo": "sociohumano"
     },
     {
       "codigo": "034738",
@@ -596,7 +598,7 @@
     {
       "codigo": "ELEC04",
       "nombre": "Electiva IV",
-      "creditos": 3,
+      "creditos": 2,
       "semestre": 8,
       "prerrequisitos": [],
       "correquisitos": [],
@@ -605,35 +607,5 @@
       "tipo": "electivas"
     }
   ],
-  "calificaciones": [],
-  "_comentarios": {
-    "estados_validos": [
-      "pending",
-      "enrolled",
-      "passed",
-      "failed",
-      "dropped"
-    ],
-    "tipos_validos": [
-      "nucleo",
-      "basicas",
-      "sociohumano",
-      "enfasis",
-      "complementarias",
-      "electivas"
-    ],
-    "tipos_descripcion": {
-      "nucleo": "Núcleo Carrera - Materias fundamentales de la carrera",
-      "basicas": "Ciencias Básicas - Matemáticas, física, química, etc.",
-      "sociohumano": "Socio Humano - Formación humanística y social",
-      "enfasis": "Énfasis - Especialización dentro de la carrera",
-      "complementarias": "Complementarias - Materias de apoyo",
-      "electivas": "Electivas - Materias de libre elección"
-    },
-    "color": "Color hexadecimal para la materia (ej: #5091AF)",
-    "nota_rango": "0.0 a 5.0",
-    "porcentaje_total": "Los porcentajes de componentes deberían sumar 100%, pero el cálculo funciona con cualquier porcentaje",
-    "prerrequisitos": "Array de códigos de materias que deben estar aprobadas ANTES de cursar esta materia",
-    "correquisitos": "Array de códigos de materias que deben cursarse EN EL MISMO SEMESTRE (coterminales)"
-  }
+  "calificaciones": []
 }
