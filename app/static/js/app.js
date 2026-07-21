@@ -270,7 +270,7 @@ const App = {
             const nota = Number(cal.nota);
             const creditos = Number(materia?.creditos || 0);
 
-            if (materia && Number.isFinite(nota) && creditos > 0) {
+            if (materia && Number.isFinite(nota) && nota >= 3.0 && creditos > 0) {
                 totalPoints += nota * creditos;
                 gradedCredits += creditos;
             }

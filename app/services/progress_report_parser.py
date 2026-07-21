@@ -1,5 +1,7 @@
 import re
 import io
+import json
+import os
 from typing import Optional
 
 TIPO_COLORS = {
@@ -30,6 +32,27 @@ def try_float(val:str)-> Optional[float]:
         return None
 
 Historial_Marker = 'Historial de Cursos'
+
+def _load_template_lookup() -> dict:
+    """Load all pensum templates and build a lookup by course code."""
+    lookup = {}
+    templates_dir = os.path.join(os.path.dirname(__file__), '..', 'static', 'templates')
+    if not os.path.isdir(templates_dir):
+        return lookup
+    for fname in os.listdir(templates_dir):
+        if fname.startswith('pensum_') and fname.endswith('.json'):
+            fpath = os.path.join(templates_dir, fname)
+            try:
+                with open(fpath, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                for m in data.get('materias', []):
+                    code = m.get('codigo')
+                    if code:
+                        lookup[code] = m
+            except Exception:
+                continue
+    return lookup
+
 def parse_progress_report_pdf(pdf_bytes: bytes) -> dict:
     try:
         import pdfplumber
@@ -68,7 +91,7 @@ def parse_from_text(text:str) -> list:
         cicle=tokens[0]
         dept=tokens[1]
         cat= tokens[2]
-        course= tokens[3]
+        course= tokens[3].lstrip('0') or '0'
         Type= tokens[-1]
         cred= tokens[-2]
 
@@ -81,16 +104,14 @@ def parse_from_text(text:str) -> list:
             title_tokens= tokens[4:-2]
         
         title=' '.join(title_tokens)
-
-        if not grade_str and title.endswith('A'):
-            grade_str= 'A'
-            title= title[:-1].strip()
         rows.append([cicle, dept, cat, course, title, grade_str, cred, Type])
     return rows
 
 def build_output(raw_rows:list) -> dict:
     cicles=[r[0] for r in raw_rows if r and len(r) >=7]
     cicles_map= build_cicle_semester_map(cicles)
+
+    template_lookup = _load_template_lookup()
 
     subjects = []
     grades = []
@@ -108,27 +129,25 @@ def build_output(raw_rows:list) -> dict:
         if cred== 0.0:
             continue
 
-        seen.add(course)
         grade=try_float(grade_str)
+        seen.add(course)
         semester= cicles_map.get(cicle,1)
 
-        if grade is None:
-            status = 'passed' if Type == 'Si' else 'pending'
-        elif grade >= 3.0:
-            status= 'passed'
+        if grade is not None:
+            status= 'passed' if grade >= 3.0 else 'failed'
         else:
-            status = 'failed'
+            status = 'passed' if Type == 'Si' else 'pending'
 
         subjects.append ({
             'codigo': course,
             'nombre': title,
             'creditos': int(cred),
             'semestre': semester,
-            'prerrequisitos': [],
-            'correquisitos': [],
+            'prerrequisitos': template_lookup.get(course, {}).get('prerrequisitos', []),
+            'correquisitos': template_lookup.get(course, {}).get('correquisitos', []),
             'estado': status,
-            'color': TIPO_COLORS.get(Type, '#5091AF'),
-            'tipo': Type,
+            'color': template_lookup.get(course, {}).get('color', TIPO_COLORS.get(Type, '#5091AF')),
+            'tipo': template_lookup.get(course, {}).get('tipo', Type),
         })
         if grade is not None:
             grades.append({

@@ -2344,7 +2344,7 @@
         let totalPoints = 0, gradedCredits = 0;
         calificaciones.forEach(cal => {
             const m = materias.find(mat => mat.codigo === cal.codigo_materia);
-            if (m && cal.nota !== undefined && cal.nota !== null) {
+            if (m && cal.nota !== undefined && cal.nota !== null && cal.nota >= 3.0) {
                 totalPoints += cal.nota * m.creditos;
                 gradedCredits += m.creditos;
             }
@@ -3204,7 +3204,7 @@
         let totalPoints = 0, gradedCredits = 0;
         calificaciones.forEach(cal => {
             const m = materias.find(mat => mat.codigo === cal.codigo_materia);
-            if (m && cal.nota !== undefined && cal.nota !== null) {
+            if (m && cal.nota !== undefined && cal.nota !== null && cal.nota >= 3.0) {
                 totalPoints += cal.nota * m.creditos;
                 gradedCredits += m.creditos;
             }
@@ -3408,7 +3408,7 @@
         let currentPoints = 0, currentCredits = 0;
         calificaciones.forEach(cal => {
             const m = materias.find(mat => mat.codigo === cal.codigo_materia);
-            if (m && cal.nota !== undefined && cal.nota !== null) {
+            if (m && cal.nota !== undefined && cal.nota !== null && cal.nota >= 3.0) {
                 currentPoints += cal.nota * m.creditos;
                 currentCredits += m.creditos;
             }
@@ -4927,7 +4927,7 @@
     // Calculate GPA (Índice) from materias with grades
     // Índice = suma(nota * créditos) / suma(créditos) para materias aprobadas
     function calculateGPA(materiasWithGrades) {
-        const graded = materiasWithGrades.filter(m => m.estado === 'passed' && m.calificacion !== null);
+        const graded = materiasWithGrades.filter(m => m.estado === 'passed' && m.calificacion !== null && m.calificacion >= 3.0);
         if (graded.length === 0) return 0;
         
         let totalPoints = 0;

@@ -174,7 +174,7 @@ const Semester = {
 
         this.materias.forEach(m => {
             const cal = calificaciones.find(c => c.codigo_materia === m.codigo);
-            if (cal && cal.nota !== null && cal.nota !== undefined) {
+            if (cal && cal.nota !== null && cal.nota !== undefined && cal.nota >= 3.0) {
                 totalPoints += cal.nota * m.creditos;
                 totalCredits += m.creditos;
             }
@@ -351,7 +351,7 @@ const Semester = {
 
             allMaterias.forEach(m => {
                 const cal = calificaciones.find(c => c.codigo_materia === m.codigo);
-                if (cal && cal.nota !== null) {
+                if (cal && cal.nota !== null && cal.nota >= 3.0) {
                     completedPoints += cal.nota * m.creditos;
                     completedCredits += m.creditos;
                 } else if (m.estado !== 'dropped') {
