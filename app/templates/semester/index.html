@@ -458,7 +458,7 @@
 
         materias.forEach(m => {
             const cal = calificaciones.find(c => c.codigo_materia === m.codigo);
-            if (cal && cal.nota !== null && cal.nota !== undefined) {
+            if (cal && cal.nota !== null && cal.nota !== undefined && cal.nota >= 3.0) {
                 totalPoints += cal.nota * m.creditos;
                 gradedCredits += m.creditos;
             }
