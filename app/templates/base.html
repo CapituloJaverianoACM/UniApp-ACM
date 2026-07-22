@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#ffffff">
+    {% if supabase_url %}
+    <meta name="supabase-url" content="{{ supabase_url }}">
+    <meta name="supabase-key" content="{{ supabase_key }}">
+    {% endif %}
     <title>{% block title %}UniApp{% endblock %}</title>
 
     <!-- Theme initialization (prevent FOUC) -->
@@ -103,6 +107,13 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                         FAQ
+                    </a>
+                    <a href="{{ url_for('consejos.index') }}"
+                       class="nav-link {% if request.blueprint == 'consejos' %}nav-link--active{% endif %}">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                        </svg>
+                        Inductores
                     </a>
                 </div>
 
@@ -229,6 +240,14 @@
                     </svg>
                     FAQ
                 </a>
+                <a href="{{ url_for('consejos.index') }}"
+                   class="flex items-center gap-3 px-3 py-2.5 text-sm font-medium rounded-lg transition-colors
+                          {% if request.blueprint == 'consejos' %}bg-accent-500/10 text-accent-600 dark:text-accent-400{% else %}text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-white/[0.06]{% endif %}">
+                    <svg class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    </svg>
+                    Inductores
+                </a>
                 <!-- GPA row in mobile menu -->
                 <div class="flex items-center justify-between px-3 py-2.5 mt-1 border-t border-gray-100 dark:border-white/[0.06]">
                     <span class="text-xs text-gray-400 dark:text-gray-500">Promedio acumulado</span>
@@ -274,35 +293,43 @@
                 De Javerianos para Javerianos
             </p>
 
-            <!-- Botón -->
+            <!-- Botón principal -->
             <button id="splash-btn"
-                    onclick="dismissSplash()"
+                    onclick="splashShowAuth()"
                     class="focus:outline-none"
-                    style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.875rem; letter-spacing: 0.06em; padding: 0.75rem 3rem; border-radius: 0.75rem; background: #004af5; border: none; color: #ffffff; transition: background 0.2s; min-width: 200px;"
+                    style="font-family: 'Montserrat', sans-serif; font-weight: 700; font-size: 0.875rem; letter-spacing: 0.06em; padding: 0.75rem 3rem; border-radius: 0.75rem; background: #004af5; border: none; color: #ffffff; transition: background 0.2s; min-width: 200px; cursor: pointer;"
                     onmouseover="this.style.background='#022983'"
                     onmouseout="this.style.background='#004af5'">
                 Entrar
             </button>
 
-            <p style="margin-top: 0.75rem; font-size: 0.68rem; color: rgba(0,8,27,0.25); font-family: 'Montserrat', sans-serif;">
-                Presiona Enter para continuar
-            </p>
         </div>
     </div>
 
     <script>
+        // Skip splash instantly: after a cloud-data reload, OR when navigating between sections already logged in
+        if (sessionStorage.getItem('splash_skip')) {
+            sessionStorage.removeItem('splash_skip');
+            document.getElementById('splash-screen')?.remove();
+        } else if (localStorage.getItem('auth_user') && sessionStorage.getItem('uniapp_session_pulled')) {
+            document.getElementById('splash-screen')?.remove();
+        }
+
         function dismissSplash() {
             const splash = document.getElementById('splash-screen');
+            if (!splash) return;
             splash.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
             splash.style.opacity = '0';
             splash.style.transform = 'scale(1.03)';
             setTimeout(() => splash.remove(), 400);
         }
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && document.getElementById('splash-screen')) {
-                dismissSplash();
+        function splashShowAuth() {
+            const modal = document.getElementById('authModal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                if (typeof App !== 'undefined') App.switchAuthTab('login');
             }
-        });
+        }
     </script>
 
     <!-- Main content -->
