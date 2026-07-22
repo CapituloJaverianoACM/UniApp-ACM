@@ -296,7 +296,7 @@ document.getElementById('signup-form').addEventListener('submit', async function
     const password = document.getElementById('signup-password').value;
     const passwordConfirm = document.getElementById('signup-password-confirm').value;
     const submitBtn = this.querySelector('button[type="submit"]');
-    const regexInstitucional = /^[a-zA-Z0-9._%+-]+@javeriana\.edu$/i;
+    const regexInstitucional = /^[a-zA-Z0-9._%+-]+@javeriana\.edu\.co$/i;
     // Validate passwords match
     if (password !== passwordConfirm) {
         showError('signup', 'Las contraseñas no coinciden');
