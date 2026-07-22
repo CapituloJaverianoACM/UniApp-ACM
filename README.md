@@ -1,247 +1,195 @@
-# 🎓 Uni-App
+# Uni-App
 
-Sistema de gestión académica universitaria para visualización de pensum, seguimiento de GPA y generación de horarios.
+Sistema de gestión académica universitaria. Visualización de pensum, seguimiento de GPA, generación de horarios y más.
 
-🌐 **[Acceder a la aplicación](https://uni-app-acm.vercel.app)**
+🌐 **[uni-app-acm.vercel.app](https://uni-app-acm.vercel.app)**
 
 ---
 
-## ✨ Funcionalidades
+## Funcionalidades
 
-### 📚 Gestión de Pensum
+### Pensum
+- **4 vistas**: Árbol (por semestre), Tabla, Grafo de prerrequisitos, Estadísticas
+- Código de colores por estado: Pendiente / Inscrita / Aprobada / Reprobada / Retirada
+- Tipos de materia: Núcleo, Básicas, Socio Humano, Énfasis, Complementarias, Electivas
+- Drag & drop entre semestres con validación de prerrequisitos
+- Múltiples planes de estudio, copia de datos entre planes
+- Simulación de inscripción de semestre
 
-#### Múltiples Vistas
-- **Vista Árbol**: Materias organizadas por semestre con diseño de tarjetas
-- **Vista Tabla**: Lista compacta para ver todas las materias de un vistazo
-- **Vista Grafo**: Visualización interactiva de prerrequisitos y dependencias
-- **Vista Estadísticas**: Dashboard con gráficas de progreso y rendimiento
-
-#### Gestión de Materias
-- Código de colores según estado:
-  - 🔵 Pendiente | 🟡 Inscrita | 🟢 Aprobada | 🔴 Reprobada | ⚫ Retirada
-- **Tipos de materia**: Núcleo Carrera, Ciencias Básicas, Socio Humano, Énfasis, Complementarias, Electivas
-- Visualización de prerrequisitos y correquisitos
-- Drag & drop entre semestres (respetando prerrequisitos)
-- Colores personalizados por materia
-
-#### Múltiples Planes de Estudio
-- Crea y gestiona varios planes de estudio
-- Copia datos entre planes
-- Alterna fácilmente entre diferentes escenarios académicos
-
-#### Simulación de Semestre
-- Simula inscripciones antes de hacerlas oficiales
-- Visualiza qué materias puedes inscribir según prerrequisitos
-- Prueba diferentes combinaciones sin afectar tu plan real
-
-### 📊 Estadísticas y Analytics
-
-- **Promedio Acumulado (GPA)** en tiempo real
-- **Gráficas interactivas**:
-  - Promedio por semestre (línea temporal)
-  - Distribución de estados (donut)
-  - Tipos de materias (donut)
-- **Tabla detallada** por semestre
-- **Top 5 mejores y peores notas**
-- Modo oscuro compatible
-
-### 📝 Calificaciones
-
-- Agrega componentes de evaluación (parciales, tareas, proyectos)
-- Asigna porcentajes a cada componente
+### Calificaciones
+- Componentes de evaluación con porcentajes
 - Cálculo automático de nota final
-- Simula qué nota necesitas en evaluaciones pendientes
+- Simulación de notas necesarias
 
-### 📅 Generador de Horarios
+### GPA
+- Promedio acumulado en tiempo real
+- Gráficas por semestre, distribución de estados y tipos
+- Simulación de notas y cálculo de nota necesaria para GPA objetivo
+- Alertas de rendimiento
 
-- Registra secciones disponibles por materia
-- Marca franjas horarias bloqueadas (trabajo, almuerzo)
-- Marca franjas preferidas (mañanas, tardes)
-- **Generación automática** de todas las combinaciones sin conflictos
-- **Métricas por combinación**: días libres, huecos, hora inicio/fin
-- **Ordenar por**: días libres, menos huecos, entrada tarde, salida temprana
-- **Exportar**: PNG (imagen), ICS (calendario)
+### Horario
+- Registro de secciones por materia
+- Franjas bloqueadas y preferidas
+- Generación automática de combinaciones sin conflictos
+- Métricas: días libres, huecos, hora inicio/fin
+- Ordenamiento por días libres, menos huecos, entrada tarde, salida temprana
+- Exportación a PNG e ICS (calendario)
 
-### 🔄 Undo/Redo
+### Sincronización
+- Offline-first: los datos se guardan en localStorage
+- Cuenta opcional para sincronizar entre dispositivos vía Supabase
+- Indicador de conexión en tiempo real
 
-- Historial completo de acciones
-- Deshaz y rehaz cambios con atajos de teclado
-- Funciona en todas las vistas
-
-### 🔗 URLs Navegables
-
-- URLs con hash para vistas del pensum (`#tree`, `#table`, `#graph`, `#stats`)
-- Query params para el horario (`?sem=1`)
-- Soporte para navegación con botones atrás/adelante del navegador
-
-### ☁️ Sincronización en la Nube
-
-- **Funciona offline**: tus datos se guardan localmente
-- Crea una cuenta para sincronizar entre dispositivos
-- Refresh automático de tokens de sesión
-- Keepalive programado para mantener activo el proyecto de Supabase
-- Indicador de estado de conexión en tiempo real
-
-### ♿ Accesibilidad
-
-- Aria-labels en elementos interactivos
-- Tooltips explicativos en botones
-- Indicador visual de conexión online/offline
-- Confirmaciones en acciones destructivas
-- Soporte completo para modo oscuro
+### General
+- Undo/Redo (Ctrl+Z / Ctrl+Y)
+- URLs navegables con hash y query params
+- Tema oscuro
+- Reporte de errores integrado (envío directo a Supabase)
 
 ---
 
-## 🚀 Cómo Usar
+## Plantillas disponibles
 
-### 1. Importar tu Pensum
+| Carrera | Materias | Créditos |
+|---------|----------|----------|
+| Ciencia de Datos | 47 | 138 |
+| Ingeniería de Sistemas | 52 | 138 |
+| Bioingeniería | 48 | 136 |
+| Ingeniería Civil | 46 | 136 |
+| Ingeniería Electrónica | 48 | 138 |
+| Ingeniería Mecánica | 49 | 133 |
+| Ingeniería Mecatrónica | 50 | 136 |
+| Ingeniería Industrial | 51 | 138 |
 
-1. Ve a la página de **Pensum**
-2. Click en **Importar**
-3. Descarga la **plantilla** y llénala con tus materias
-4. Sube el archivo JSON
-
-**Formato del JSON:**
-```json
-{
-  "materias": [
-    {
-      "codigo": "MAT101",
-      "nombre": "Cálculo I",
-      "creditos": 4,
-      "semestre": 1,
-      "prerrequisitos": [],
-      "correquisitos": [],
-      "estado": "passed",
-      "color": "#5091AF",
-      "tipo": "basicas"
-    }
-  ],
-  "calificaciones": [
-    {
-      "codigo_materia": "MAT101",
-      "nota": 4.2,
-      "componentes": [
-        { "nombre": "Parcial 1", "porcentaje": 25, "nota": 4.0 },
-        { "nombre": "Final", "porcentaje": 75, "nota": 4.3 }
-      ]
-    }
-  ]
-}
-```
-
-**Tipos de materia válidos:**
-- `nucleo` - Núcleo Carrera
-- `basicas` - Ciencias Básicas
-- `sociohumano` - Socio Humano
-- `enfasis` - Énfasis
-- `complementarias` - Complementarias
-- `electivas` - Electivas
-
-### 2. Navegar entre Vistas
-
-- **Árbol** (por defecto): Ver materias por semestre
-- **Tabla**: Vista compacta tipo lista
-- **Grafo**: Ver dependencias entre materias
-- **Estadísticas**: Dashboard con métricas y gráficas
-
-### 3. Gestionar Planes de Estudio
-
-1. Click en el dropdown de planes (arriba a la izquierda)
-2. **Nuevo Plan**: Crear un plan desde cero o copiando otro
-3. **Editar**: Cambiar nombre/descripción
-4. **Administrar**: Ver todos los planes, eliminar los que no uses
-
-### 4. Registrar Calificaciones
-
-1. Click en una materia inscrita o aprobada
-2. Cambia el estado y agrega la nota final
-3. O usa componentes para cálculo automático
-
-### 5. Generar Horarios
-
-1. Ve a **Horario**
-2. Selecciona el semestre
-3. Registra las clases disponibles
-4. Marca franjas bloqueadas/preferidas
-5. Click en **Generar**
-6. Navega entre combinaciones
-7. Exporta como PNG o ICS
-
-### 6. Sincronizar
-
-1. Click en tu usuario (esquina superior derecha)
-2. Click en **Sincronizar**
-3. Tus datos se suben a la nube
-
-### 7. Configurar keepalive de Supabase
-
-1. En Vercel, agrega `KEEPALIVE_SECRET` como variable de entorno.
-2. En GitHub, crea estos repository secrets:
-   - `KEEPALIVE_URL`: URL pública de la app, por ejemplo `https://uni-app-eta.vercel.app`
-   - `KEEPALIVE_SECRET`: el mismo valor configurado en Vercel
-3. El workflow `.github/workflows/keepalive.yml` llamará `/api/keepalive` cada 3 días.
+También podés empezar con un pensum vacío o importar tu propio JSON.
 
 ---
 
-## 💡 Tips
+## Cómo usar
 
-- **Arrastra materias** entre semestres para reorganizar tu plan
-- Usa **Ctrl+Z** / **Ctrl+Y** para deshacer/rehacer
-- **Simula inscripciones** antes de hacer cambios reales
-- **Exporta tu pensum** como backup antes de cambios grandes
-- La app funciona **offline** - tus datos están seguros en tu navegador
-- Usa **franjas preferidas** para priorizar ciertos horarios
-- Cambia entre **planes** para explorar diferentes caminos académicos
+### 1. Elegir un plan
+Al entrar por primera vez, seleccioná una carrera de las plantillas o empezá vacío. Después podés crear más planes desde el selector superior.
+
+### 2. Gestionar materias
+Cambiá estados, colores, arrastrá entre semestres. Las reglas de prerrequisitos se validan automáticamente.
+
+### 3. Registrar notas
+Hacé click en una materia para asignarle nota y componentes de evaluación.
+
+### 4. Generar horario
+Andá a la pestaña Horario, registrá las secciones disponibles y generá combinaciones.
+
+### 5. Sincronizar (opcional)
+Creá una cuenta para sincronizar tus datos entre dispositivos.
+
+### 6. Reportar errores
+Usá el botón ⓘ en la barra de navegación para reportar un problema. Se envía directo a Supabase con diagnóstico automático.
 
 ---
 
-## 🛠️ Tecnologías
+## Configuración
+
+### Variables de entorno
+
+| Variable | Requerida | Descripción |
+|----------|-----------|-------------|
+| `SUPABASE_URL` | Sí | URL de tu proyecto Supabase |
+| `SUPABASE_ANON_KEY` | Sí | Anon key de Supabase |
+| `SECRET_KEY` | Sí | Clave secreta de Flask |
+| `FLASK_ENV` | No | `development`, `production` o `testing` |
+| `KEEPALIVE_SECRET` | No | Secreto para endpoint de keepalive (obsoleto) |
+
+### Base de datos
+
+Ejecutá `database/supabase_schema.sql` en el SQL Editor de Supabase para crear las tablas:
+
+- `pensums`, `clases`, `calificaciones`, `configuraciones`, `franjas` — datos de usuario (RLS por `user_id`)
+- `errors` — reportes de errores (INSERT público, SELECT solo autenticado)
+
+### Keepalive
+
+El workflow `.github/workflows/keepalive.yml` hace ping a la REST API de Supabase cada 3 días para evitar que la base de datos entre en suspensión. Requiere los secrets `SUPABASE_URL` y `SUPABASE_ANON_KEY` en GitHub.
+
+---
+
+## Stack
 
 | Categoría | Tecnología |
 |-----------|------------|
 | Backend | Flask (Python) |
-| Frontend | Tailwind CSS, Vanilla JavaScript |
-| Gráficas | Canvas API nativo |
-| Base de Datos | Supabase (PostgreSQL) |
-| Autenticación | Supabase Auth |
+| Frontend | Tailwind CSS, Vanilla JS |
+| Base de datos | Supabase (PostgreSQL) |
+| Autenticación | Supabase Auth (email, OAuth) |
+| Gráficas | Canvas API |
+| Exportación | PNG (html2canvas), ICS (iCalendar) |
 | Hosting | Vercel |
+| CI/CD | GitHub Actions |
 
 ---
 
-## 📁 Estructura del Proyecto
+## Estructura
 
 ```
-Uni-App/
-├── app/
-│   ├── blueprints/       # Rutas Flask (API, pensum, schedule, etc.)
-│   ├── models/           # Modelos Pydantic
-│   ├── services/         # Servicios (database, etc.)
-│   ├── static/
-│   │   ├── css/          # Estilos
-│   │   ├── js/           # JavaScript (storage, theme, etc.)
-│   │   └── templates/    # Plantillas JSON de ejemplo
-│   └── templates/        # Templates Jinja2
-├── config.py             # Configuración
-├── requirements.txt      # Dependencias Python
-└── vercel.json           # Configuración de deploy
+app/
+├── blueprints/          # Flask blueprints
+│   ├── api.py           #   28 endpoints REST (sync, GPA, schedule, export…)
+│   ├── pensum.py        #   /pensum
+│   ├── semester.py      #   /semester
+│   ├── schedule.py      #   /schedule
+│   ├── auth.py          #   /auth (confirmación email, reset password)
+│   ├── faq.py           #   /faq
+│   └── consejos.py      #   /consejos
+├── models/              # Pydantic models
+│   ├── materia.py       #   Materia, Pensum
+│   ├── clase.py         #   Clase, BloqueHorario
+│   ├── horario.py       #   Franja, HorarioCombination
+│   └── configuracion.py #   Configuracion, Calificacion
+├── services/            # Lógica de negocio
+│   ├── database.py      #   Supabase CRUD + auth
+│   ├── pensum_service.py
+│   ├── gpa_service.py
+│   ├── schedule_service.py
+│   ├── export_service.py
+│   ├── parser_service.py
+│   └── progress_report_parser.py
+├── static/
+│   ├── js/              #   8 módulos JS (app, auth, storage, pensum…)
+│   ├── css/main.css
+│   └── templates/       #   Plantillas JSON de pensums
+├── templates/           # Jinja2 templates
+├── __init__.py          # App factory + blueprint registration
+└── config.py            # Configuración
+
+api/index.py             # Entry point Vercel (WSGI)
+database/supabase_schema.sql
+.github/workflows/
+├── keepalive.yml        # Cron cada 3 días
+└── tests.yml            # CI en push/PR
+requirements.txt
+vercel.json
 ```
 
 ---
 
-## 🤝 Contribuir
+## Desarrollo
 
-¿Encontraste un bug o tienes una idea? 
-
-1. Abre un [Issue](https://github.com/Samu-Kiss/Uni-App/issues)
-2. O haz un Pull Request
-
----
-
-## 📄 Licencia
-
-Este proyecto está licenciado bajo la [GNU General Public License v3.0](LICENSE).
+```bash
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements-dev.txt
+cp .env.example .env   # completar SUPABASE_URL y SUPABASE_ANON_KEY
+flask run
+```
 
 ---
 
-Hecho con ❤️ para estudiantes universitarios
+## Tests
+
+```bash
+pytest
+```
+
+---
+
+## Licencia
+
+GNU General Public License v3.0. Ver [LICENSE](LICENSE).
