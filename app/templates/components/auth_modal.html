@@ -277,7 +277,8 @@ document.getElementById('signin-form').addEventListener('submit', async function
             App.showAlert('¡Bienvenido!', 'success');
         }
 
-        // Optionally pull data from cloud
+        // Wipe previous user's local data before loading this user's cloud data
+        clearLocalAppData();
         await pullFromCloud();
         
     } catch (error) {
@@ -341,12 +342,14 @@ document.getElementById('signup-form').addEventListener('submit', async function
             saveAuthData(data.user, data.session);
             updateAuthUI(true, data.user.email);
             closeAuthModal();
-            
+            if (typeof dismissSplash === 'function') dismissSplash();
+
             if (typeof App !== 'undefined' && App.showAlert) {
                 App.showAlert('¡Cuenta creada exitosamente!', 'success');
             }
-            
-            // Sync local data to cloud
+
+            // New account starts clean, then syncs empty state to cloud
+            clearLocalAppData();
             await syncToCloud();
         }
         
@@ -375,6 +378,7 @@ async function signOut() {
     } catch (error) {
         console.error('Sign out error:', error);
     } finally {
+        clearLocalAppData();
         clearAuthData();
         window.location.reload();
     }
@@ -444,6 +448,16 @@ function clearAuthData() {
     authSession = null;
     localStorage.removeItem('auth_user');
     localStorage.removeItem('auth_session');
+}
+
+// Clear all local app data (uniapp_* keys)
+function clearLocalAppData() {
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key && key.startsWith('uniapp_')) keys.push(key);
+    }
+    keys.forEach(k => localStorage.removeItem(k));
 }
 
 // Load auth data on page load
