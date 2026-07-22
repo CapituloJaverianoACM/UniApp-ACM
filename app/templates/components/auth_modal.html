@@ -264,6 +264,9 @@ document.getElementById('signin-form').addEventListener('submit', async function
         updateAuthUI(true, data.user.email);
         closeAuthModal();
         
+        // Dispatch authunlocked event to hide lock screen
+        window.dispatchEvent(new CustomEvent('authunlocked'));
+        
         if (typeof App !== 'undefined' && App.showAlert) {
             App.showAlert('¡Bienvenido!', 'success');
         }
@@ -333,6 +336,9 @@ document.getElementById('signup-form').addEventListener('submit', async function
             updateAuthUI(true, data.user.email);
             closeAuthModal();
             
+            // Dispatch authunlocked event to hide lock screen
+            window.dispatchEvent(new CustomEvent('authunlocked'));
+            
             if (typeof App !== 'undefined' && App.showAlert) {
                 App.showAlert('¡Cuenta creada exitosamente!', 'success');
             }
@@ -365,12 +371,20 @@ async function signOut() {
     } catch (error) {
         console.error('Sign out error:', error);
     } finally {
+        // Clear ALL local user data
+        if (typeof storage !== 'undefined' && storage.clearAllUserData) {
+            storage.clearAllUserData();
+        }
+        
         // Always clear local auth data
         clearAuthData();
         updateAuthUI(false);
         
         const userMenu = document.getElementById('user-menu');
         if (userMenu) userMenu.classList.add('hidden');
+        
+        // Show lock screen
+        window.dispatchEvent(new CustomEvent('authlocked'));
         
         if (typeof App !== 'undefined' && App.showAlert) {
             App.showAlert('Sesión cerrada', 'success');

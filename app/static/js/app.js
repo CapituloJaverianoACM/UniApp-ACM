@@ -457,8 +457,16 @@ const App = {
     }
 };
 
-// Initialize app when DOM is ready
-document.addEventListener('DOMContentLoaded', () => App.init());
+// Initialize lock screen FIRST, then app
+document.addEventListener('DOMContentLoaded', () => {
+    // Initialize lock screen
+    if (typeof lockScreen !== 'undefined') {
+        lockScreen.init();
+    }
+    
+    // Initialize app
+    App.init();
+});
 
 // Export for modules
 if (typeof module !== 'undefined' && module.exports) {

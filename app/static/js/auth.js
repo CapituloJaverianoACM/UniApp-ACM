@@ -78,6 +78,18 @@ class AuthManager {
         return this.currentUser;
     }
 
+    /**
+     * Require authentication - gate for protected routes
+     * Dispatches 'authrequired' event if not authenticated
+     */
+    requireAuth() {
+        if (!this.isAuthenticated()) {
+            window.dispatchEvent(new CustomEvent('authrequired'));
+            return false;
+        }
+        return true;
+    }
+
     translateError(msg) {
         if(!msg) return 'Ocurrio un error inesperado, intenta de nuevo';
         const m = msg.toLowerCase();
@@ -182,7 +194,7 @@ class AuthManager {
     }
 
     /**
-     * Sign out
+     * Sign out - clears ALL local data first, then signs out from Supabase
      */
     async signOut() {
         if (!this.supabase) {
@@ -190,13 +202,17 @@ class AuthManager {
         }
 
         try {
-            // Sync before signing out
-            if (this.isAuthenticated()) {
-                await storage.syncToServer();
+            // Clear ALL local user data FIRST (before signOut)
+            if (typeof storage !== 'undefined' && storage.clearAllUserData) {
+                storage.clearAllUserData();
             }
 
             const { error } = await this.supabase.auth.signOut();
             if (error) throw error;
+
+            this.currentUser = null;
+            this.notifyListeners(null);
+            window.dispatchEvent(new CustomEvent('authlocked'));
 
             return { success: true };
         } catch (error) {
@@ -229,10 +245,15 @@ class AuthManager {
     }
 
     /**
-     * Sync data on login
+     * Sync data on login - clears local cache first, then full sync from cloud
      */
     async syncOnLogin() {
         if (!this.isAuthenticated()) return;
+
+        // Clear local cache BEFORE syncing from cloud
+        if (typeof storage !== 'undefined' && storage.clearAllUserData) {
+            storage.clearAllUserData();
+        }
 
         // Initialize storage with Supabase client
         storage.initSupabase(this.supabase, this.currentUser.id);

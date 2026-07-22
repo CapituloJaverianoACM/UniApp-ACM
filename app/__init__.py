@@ -47,6 +47,13 @@ def create_app(config_name: str = None) -> Flask:
             response.headers['Expires'] = '0'
             return response
     
+    # Add auth requirement header to all page responses
+    @app.after_request
+    def add_auth_header(response):
+        # Signal to client that auth is required (lock screen handles actual blocking)
+        response.headers['X-Auth-Required'] = 'true'
+        return response
+
     # Register blueprints
     from app.blueprints.pensum import pensum_bp
     from app.blueprints.semester import semester_bp

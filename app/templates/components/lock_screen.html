@@ -1,0 +1,395 @@
+<!-- Lock Screen - Full-screen auth gate (hidden by default, shown by JS if not authenticated) -->
+<div id="lock-screen" class="hidden fixed inset-0 z-[100] flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div class="w-full max-w-md px-6">
+        <!-- Logo Grande -->
+        <div class="flex justify-center mb-8">
+            <div class="w-28 h-28 rounded-2xl bg-accent-500 flex items-center justify-center shadow-lg shadow-accent-500/20">
+                <svg class="w-16 h-16 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <div class="text-center mb-6">
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">UniApp</h1>
+            <p class="text-sm text-gray-500 dark:text-gray-400">Gestión académica para la PUJ</p>
+        </div>
+
+        <!-- Auth Card -->
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-100 dark:border-gray-700">
+            <!-- Tabs -->
+            <div class="flex gap-3 border-b border-gray-200 dark:border-gray-700 mb-6">
+                <button id="lock-tab-signin" onclick="lockScreen.switchTab('signin')" 
+                        class="pb-2 px-1 text-sm font-medium border-b-2 border-accent-500 text-accent-600 dark:text-accent-400 whitespace-nowrap flex-1">
+                    Iniciar sesión
+                </button>
+                <button id="lock-tab-signup" onclick="lockScreen.switchTab('signup')"
+                        class="pb-2 px-1 text-sm font-medium border-b-2 border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 whitespace-nowrap flex-1">
+                    Crear cuenta
+                </button>
+            </div>
+
+            <!-- Sign In Form -->
+            <form id="lock-signin-form" class="space-y-4">
+                <div>
+                    <label for="lock-signin-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Correo electrónico
+                    </label>
+                    <input type="email" id="lock-signin-email" name="email" required
+                           class="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                           placeholder="tu@javeriana.edu.co">
+                </div>
+                <div>
+                    <label for="lock-signin-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Contraseña
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="lock-signin-password" name="password" required
+                               class="w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                               placeholder="••••••••">
+                        <button type="button" onclick="lockScreen.togglePassword('lock-signin-password', this)"
+                                class="absolute inset-y-0 right-0 px-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                aria-label="Mostrar contraseña">
+                            <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path class="password-eye-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                <path class="password-eye-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path class="password-eye-closed hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M10.584 10.587A2 2 0 0012 14a2 2 0 001.414-.586M9.88 5.09A10.43 10.43 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.523 10.523 0 01-2.255 3.568M6.228 6.228A10.517 10.517 0 002.458 12a10.542 10.542 0 005.318 5.772"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="lock-signin-error" class="hidden text-sm text-red-600 dark:text-red-400"></div>
+                <button type="submit" 
+                        class="w-full py-2.5 px-4 bg-accent-500 text-white font-medium rounded-lg hover:bg-accent-600 transition-colors">
+                    Iniciar sesión
+                </button>
+            </form>
+
+            <!-- Sign Up Form -->
+            <form id="lock-signup-form" class="hidden space-y-4">
+                <div>
+                    <label for="lock-signup-email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Correo electrónico
+                    </label>
+                    <input type="email" id="lock-signup-email" name="email" required
+                           class="w-full px-3 py-2.5 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                           placeholder="tu@javeriana.edu.co">
+                </div>
+                <div>
+                    <label for="lock-signup-password" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Contraseña
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="lock-signup-password" name="password" required minlength="6"
+                               class="w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                               placeholder="••••••••">
+                        <button type="button" onclick="lockScreen.togglePassword('lock-signup-password', this)"
+                                class="absolute inset-y-0 right-0 px-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                aria-label="Mostrar contraseña">
+                            <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path class="password-eye-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                <path class="password-eye-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path class="password-eye-closed hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M10.584 10.587A2 2 0 0012 14a2 2 0 001.414-.586M9.88 5.09A10.43 10.43 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.523 10.523 0 01-2.255 3.568M6.228 6.228A10.517 10.517 0 002.458 12a10.542 10.542 0 005.318 5.772"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <label for="lock-signup-password-confirm" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Confirmar contraseña
+                    </label>
+                    <div class="relative">
+                        <input type="password" id="lock-signup-password-confirm" name="password_confirm" required minlength="6"
+                               class="w-full px-3 py-2.5 pr-10 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-lg focus:ring-2 focus:ring-accent-500 focus:border-accent-500"
+                               placeholder="••••••••">
+                        <button type="button" onclick="lockScreen.togglePassword('lock-signup-password-confirm', this)"
+                                class="absolute inset-y-0 right-0 px-3 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300"
+                                aria-label="Mostrar contraseña">
+                            <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path class="password-eye-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                                <path class="password-eye-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                                <path class="password-eye-closed hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18M10.584 10.587A2 2 0 0012 14a2 2 0 001.414-.586M9.88 5.09A10.43 10.43 0 0112 5c4.478 0 8.268 2.943 9.542 7a10.523 10.523 0 01-2.255 3.568M6.228 6.228A10.517 10.517 0 002.458 12a10.542 10.542 0 005.318 5.772"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="lock-signup-error" class="hidden text-sm text-red-600 dark:text-red-400"></div>
+                <button type="submit"
+                        class="w-full py-2.5 px-4 bg-accent-500 text-white font-medium rounded-lg hover:bg-accent-600 transition-colors">
+                    Crear cuenta
+                </button>
+            </form>
+        </div>
+
+        <!-- Footer text -->
+        <p class="text-center text-xs text-gray-400 dark:text-gray-500 mt-4">
+            Solo correos @javeriana.edu.co
+        </p>
+    </div>
+</div>
+
+<script>
+const lockScreen = {
+    init() {
+        // Check if user is authenticated
+        const userStr = localStorage.getItem('auth_user');
+        const sessionStr = localStorage.getItem('auth_session');
+        
+        if (userStr && sessionStr) {
+            // User is logged in, hide lock screen
+            this.hide();
+        } else {
+            // Not logged in, show lock screen and block everything
+            this.show();
+            this.setupForms();
+        }
+        
+        // Listen for auth state changes
+        window.addEventListener('authlocked', () => this.show());
+        window.addEventListener('authunlocked', () => this.hide());
+    },
+
+    show() {
+        document.getElementById('lock-screen').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    },
+
+    hide() {
+        document.getElementById('lock-screen').classList.add('hidden');
+        document.body.style.overflow = '';
+    },
+
+    switchTab(tab) {
+        const signinForm = document.getElementById('lock-signin-form');
+        const signupForm = document.getElementById('lock-signup-form');
+        const tabSignin = document.getElementById('lock-tab-signin');
+        const tabSignup = document.getElementById('lock-tab-signup');
+        
+        this.hideErrors();
+        
+        if (tab === 'signin') {
+            signinForm.classList.remove('hidden');
+            signupForm.classList.add('hidden');
+            tabSignin.classList.add('border-accent-500', 'text-accent-600');
+            tabSignin.classList.remove('border-transparent', 'text-gray-500');
+            tabSignup.classList.remove('border-accent-500', 'text-accent-600');
+            tabSignup.classList.add('border-transparent', 'text-gray-500');
+        } else {
+            signinForm.classList.add('hidden');
+            signupForm.classList.remove('hidden');
+            tabSignup.classList.add('border-accent-500', 'text-accent-600');
+            tabSignup.classList.remove('border-transparent', 'text-gray-500');
+            tabSignin.classList.remove('border-accent-500', 'text-accent-600');
+            tabSignin.classList.add('border-transparent', 'text-gray-500');
+        }
+    },
+
+    hideErrors() {
+        document.getElementById('lock-signin-error').classList.add('hidden');
+        document.getElementById('lock-signup-error').classList.add('hidden');
+    },
+
+    showError(formType, message) {
+        const errorEl = document.getElementById(`lock-${formType}-error`);
+        errorEl.textContent = message;
+        errorEl.classList.remove('hidden');
+    },
+
+    togglePassword(inputId, buttonEl) {
+        const input = document.getElementById(inputId);
+        if (!input || !buttonEl) return;
+
+        const isVisible = input.type === 'text';
+        input.type = isVisible ? 'password' : 'text';
+        
+        buttonEl.querySelectorAll('.password-eye-open').forEach((el) => el.classList.toggle('hidden', !isVisible));
+        buttonEl.querySelectorAll('.password-eye-closed').forEach((el) => el.classList.toggle('hidden', isVisible));
+    },
+
+    setupForms() {
+        // Sign In
+        document.getElementById('lock-signin-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            this.hideErrors();
+            
+            const email = document.getElementById('lock-signin-email').value;
+            const password = document.getElementById('lock-signin-password').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="animate-pulse">Iniciando sesión...</span>';
+            
+            try {
+                const response = await fetch('/api/auth/signin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || 'Error al iniciar sesión');
+                }
+                
+                // Save auth data
+                localStorage.setItem('auth_user', JSON.stringify(data.user));
+                localStorage.setItem('auth_session', JSON.stringify(data.session));
+                
+                // Pull data from cloud
+                await this.pullFromCloud(data.user, data.session);
+                
+            } catch (error) {
+                this.showError('signin', error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Iniciar sesión';
+            }
+        });
+
+        // Sign Up
+        document.getElementById('lock-signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            this.hideErrors();
+            
+            const email = document.getElementById('lock-signup-email').value;
+            const password = document.getElementById('lock-signup-password').value;
+            const passwordConfirm = document.getElementById('lock-signup-password-confirm').value;
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const regexInstitucional = /^[a-zA-Z0-9._%+-]+@javeriana\.edu\.co$/i;
+            
+            if (password !== passwordConfirm) {
+                this.showError('signup', 'Las contraseñas no coinciden');
+                return;
+            }
+            
+            if (password.length < 6) {
+                this.showError('signup', 'La contraseña debe tener al menos 6 caracteres');
+                return;
+            }
+
+            if (!regexInstitucional.test(email)) {
+                this.showError('signup', 'El correo asociado debe ser el de universidad');
+                return;
+            }
+            
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="animate-pulse">Creando cuenta...</span>';
+            
+            try {
+                const response = await fetch('/api/auth/signup', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (!response.ok || data.error) {
+                    throw new Error(data.error || 'Error al crear cuenta');
+                }
+                
+                // Check if email confirmation is required
+                if (data.user && !data.session) {
+                    this.showError('signup', '¡Cuenta creada! Revisa tu correo para confirmar.');
+                } else if (data.session) {
+                    // Auto-login if no confirmation needed
+                    localStorage.setItem('auth_user', JSON.stringify(data.user));
+                    localStorage.setItem('auth_session', JSON.stringify(data.session));
+                    
+                    // Sync local data to cloud
+                    await this.syncToCloud(data.user, data.session);
+                }
+                
+            } catch (error) {
+                this.showError('signup', error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Crear cuenta';
+            }
+        });
+    },
+
+    async pullFromCloud(user, session) {
+        try {
+            const response = await fetch(`/api/sync/pull?user_id=${user.id}`, {
+                headers: { 'Authorization': `Bearer ${session.access_token}` }
+            });
+            
+            const result = await response.json();
+            
+            if (!response.ok || result.error) {
+                console.error('Pull error:', result.error);
+                return;
+            }
+            
+            const data = result.data || {};
+            
+            // Check if cloud has data
+            const hasCloudData = (Array.isArray(data.pensum) && data.pensum.length > 0) ||
+                (Array.isArray(data.clases) && data.clases.length > 0) ||
+                (Array.isArray(data.calificaciones) && data.calificaciones.length > 0) ||
+                (data.configuracion && Object.keys(data.configuracion).length > 0);
+
+            if (hasCloudData) {
+                // Apply cloud data
+                if ('pensum' in data) localStorage.setItem('uniapp_materias', JSON.stringify(data.pensum));
+                if ('clases' in data) localStorage.setItem('uniapp_clases', JSON.stringify(data.clases));
+                if ('calificaciones' in data) localStorage.setItem('uniapp_calificaciones', JSON.stringify(data.calificaciones));
+                if ('configuracion' in data) localStorage.setItem('uniapp_configuracion', JSON.stringify(data.configuracion));
+                if ('franjas' in data) localStorage.setItem('uniapp_franjas', JSON.stringify(data.franjas));
+            }
+            
+            // Hide lock screen and reload
+            this.hide();
+            window.location.reload();
+            
+        } catch (error) {
+            console.error('Pull error:', error);
+            // Still hide lock screen even if pull fails
+            this.hide();
+            window.location.reload();
+        }
+    },
+
+    async syncToCloud(user, session) {
+        try {
+            const localData = {
+                user_id: user.id,
+                pensum: JSON.parse(localStorage.getItem('uniapp_materias') || '[]'),
+                clases: JSON.parse(localStorage.getItem('uniapp_clases') || '[]'),
+                calificaciones: JSON.parse(localStorage.getItem('uniapp_calificaciones') || '[]'),
+                configuracion: JSON.parse(localStorage.getItem('uniapp_configuracion') || '{}'),
+                franjas: JSON.parse(localStorage.getItem('uniapp_franjas') || '[]')
+            };
+            
+            const response = await fetch('/api/sync', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${session.access_token}`
+                },
+                body: JSON.stringify(localData)
+            });
+            
+            const data = await response.json();
+            
+            if (!response.ok || data.error) {
+                throw new Error(data.error || 'Error al sincronizar');
+            }
+            
+            // Hide lock screen and reload
+            this.hide();
+            window.location.reload();
+            
+        } catch (error) {
+            console.error('Sync error:', error);
+            // Still hide lock screen even if sync fails
+            this.hide();
+            window.location.reload();
+        }
+    }
+};
+</script>

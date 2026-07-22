@@ -781,11 +781,55 @@ class StorageManager {
     }
 
     /**
-     * Clear all local data
+     * Clear all local data (legacy - keeps plan structure)
      */
     clearAll() {
         const keys = ['materias', 'clases', 'franjas', 'calificaciones', 'configuracion', 'selectedSchedule', 'creditos_validados', '_pendingSync'];
         keys.forEach(key => localStorage.removeItem(this.prefix + key));
+    }
+
+    /**
+     * Clear ALL user data across ALL plans - used on logout
+     * Removes everything: all plans' data, auth tokens, history, config
+     */
+    clearAllUserData() {
+        // Get all plan IDs
+        const planes = this.getLocal('planes') || [];
+        const planIds = planes.map(p => p.id);
+        
+        // Always include default plan
+        if (!planIds.includes('default')) planIds.push('default');
+        
+        // Clear data for each plan
+        planIds.forEach(planId => {
+            const prefix = planId === 'default' ? '' : `${planId}_`;
+            const dataKeys = ['materias', 'calificaciones', 'clases', 'creditos_validados', 'franjas'];
+            dataKeys.forEach(k => localStorage.removeItem(this.prefix + prefix + k));
+        });
+        
+        // Clear global/shared keys
+        const globalKeys = [
+            'planes', 'planActivo', 'planPrincipal',
+            'configuracion', 'selectedSchedule', 'franjas',
+            '_pendingSync', 'localUpdatedAt', 'lastCloudSyncAt',
+            'auth_user', 'auth_session', 'auth_refresh_token'
+        ];
+        globalKeys.forEach(key => localStorage.removeItem(this.prefix + key));
+        
+        // Clear history
+        localStorage.removeItem(this.prefix + 'history');
+        
+        // Clear Service Worker caches if available
+        if ('caches' in window) {
+            caches.keys().then(names => {
+                names.forEach(name => caches.delete(name));
+            });
+        }
+        
+        // Dispatch event for UI updates
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent('storagecleared', { detail: { source: 'logout' } }));
+        }
     }
 
     // ==================== ALIASES ====================
