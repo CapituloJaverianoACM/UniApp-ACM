@@ -335,41 +335,6 @@ class DatabaseService:
             else:
                 return {'error': str(e)}
     
-    @classmethod
-    def report_error(cls, message: str, steps: str = None, diagnostics: dict = None, page: str = None, user_agent: str = None) -> dict:
-        """
-        Save a problem report to the errors table.
-
-        Args:
-            message: Description of the problem
-            steps: Steps to reproduce (optional)
-            diagnostics: Diagnostic info dict (optional)
-            page: Page where the error occurred (optional)
-            user_agent: Browser/device user agent (optional)
-
-        Returns:
-            Result dict
-        """
-        client = cls.get_client()
-        if not client:
-            return {'error': 'Database not configured'}
-
-        try:
-            row = {'message': message}
-            if steps:
-                row['steps'] = steps
-            if diagnostics is not None:
-                row['diagnostics'] = diagnostics
-            if page:
-                row['page'] = page
-            if user_agent:
-                row['user_agent'] = user_agent
-
-            response = client.table('errors').insert(row).execute()
-            return {'success': True, 'data': response.data}
-        except Exception as e:
-            return {'error': str(e)}
-
     # ==================== Data Methods ====================
     
     @classmethod

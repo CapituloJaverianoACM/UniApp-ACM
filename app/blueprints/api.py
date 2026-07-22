@@ -22,30 +22,6 @@ from app.services.parser_service import ParserService
 api_bp = Blueprint('api', __name__)
 
 
-# ==================== Error Report Endpoints ====================
-
-@api_bp.route('/errors/report', methods=['POST'])
-def report_error():
-    """Submit a problem report."""
-    data = request.get_json()
-    message = data.get('message', '').strip()
-    if not message:
-        return jsonify({'error': 'Message is required'}), 400
-
-    result = DatabaseService.report_error(
-        message=message,
-        steps=data.get('steps', '').strip() or None,
-        diagnostics=data.get('diagnostics'),
-        page=data.get('page'),
-        user_agent=request.headers.get('User-Agent'),
-    )
-
-    if 'error' in result:
-        return jsonify(result), 500
-
-    return jsonify(result), 201
-
-
 # ==================== Auth Endpoints ====================
 
 @api_bp.route('/keepalive', methods=['GET'])
